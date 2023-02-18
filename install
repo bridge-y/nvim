@@ -1,0 +1,73 @@
+#!/bin/sh
+set -e
+
+NEOVIM_VERSION=nightly
+LAZYGIT_VERSION=0.37.0
+DELTA_VERSION=0.15.1
+
+CURRENT_DIR=$(
+  cd "$(dirname "$0")"
+  pwd
+)
+
+if [ ! -d "$HOME"/.config ]; then
+  mkdir "${HOME}"/.config
+fi
+
+ln -vfsn "${CURRENT_DIR}" "${HOME}"/.config/nvim
+
+# install dependencies if in container
+if [ -f /.dockerenv ]; then
+  sudo apt-get update
+  export DEBIAN_FRONTEND=noninteractive
+
+  # For building neovim
+  sudo apt-get -y install --no-install-recommends \
+    ninja-build \
+    gettext \
+    libtool \
+    libtool-bin \
+    autoconf \
+    automake \
+    cmake \
+    g++ \
+    pkg-config \
+    unzip \
+    curl \
+    doxygen \
+    lua5.3
+  # mason.nvim may require
+  sudo apt-get -y install --no-install-recommends \
+    nodejs \
+    npm \
+    python3 \
+    python3-pip
+  # utility
+  sudo apt-get -y install --no-install-recommends \
+    ripgrep \
+    fish
+
+  # Lazygit
+  mkdir -p /tmp/lazygit
+  cd /tmp/lazygit
+  curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz | tar xz
+  sudo install lazygit /usr/local/bin
+
+  # Neovim
+  mkdir -p /tmp/
+  cd /tmp
+  git clone https://github.com/neovim/neovim
+  cd /tmp/neovim
+  git checkout ${NEOVIM_VERSION}
+  make -j4 && sudo make install
+
+  # delta
+  mkdir -p /tmp/delta
+  cd /tmp/delta
+  curl -fsSL https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components 1
+  sudo mv /tmp/delta/delta /usr/local/bin/
+
+  # cleanup
+  sudo rm -rf /var/lib/apt/lists/*
+  rm -rf /tmp/*
+fi
