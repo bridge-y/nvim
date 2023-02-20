@@ -17,6 +17,8 @@ package({
   keys = {
     { '<C-_>', '<Plug>(comment_toggle_linewise_current)', noremap = true, mode = 'n', desc = 'Comment Toggle Current' },
     { '<C-_>', '<Plug>(comment_toggle_linewise_visual)', noremap = true, mode = 'x', desc = 'Comment Toggle Current' },
+    { '<C-/>', '<Plug>(comment_toggle_linewise_current)', noremap = true, mode = 'n', desc = 'Comment Toggle Current' },
+    { '<C-/>', '<Plug>(comment_toggle_linewise_visual)', noremap = true, mode = 'x', desc = 'Comment Toggle Current' },
   },
   config = function()
     require('Comment').setup()
