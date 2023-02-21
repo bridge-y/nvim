@@ -36,6 +36,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && cd /tmp/lazygit \
   && curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz | tar xz \
   && install lazygit /usr/local/bin \
+  # Commitizen
+  && npm install -g commitizen \
+  && npm install -g cz-conventional-changelog \
   # Neovim
   && mkdir -p /tmp/ \
   && cd /tmp \
