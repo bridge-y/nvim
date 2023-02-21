@@ -53,6 +53,11 @@ if [ -f /.dockerenv ]; then
   curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz | tar xz
   sudo install lazygit /usr/local/bin
 
+  # Commitizen
+  sudo npm install -g commitizen
+  sudo npm install -g cz-conventional-changelog
+  echo '{ "path": "cz-conventional-changelog" }' > ~/.czrc
+
   # Neovim
   mkdir -p /tmp/
   cd /tmp
