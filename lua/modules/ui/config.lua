@@ -173,16 +173,10 @@ function config.noice()
       lsp_doc_border = false, -- add a border to hover docs and signature help
     },
     routes = {
+      -- https://github.com/folke/noice.nvim/issues/331
       {
         view = 'split',
-        filter = { event = 'msg_show', min_height = 20 },
-      },
-      {
-        filter = {
-          event = 'notify',
-          min_height = 8,
-        },
-        view = 'split',
+        filter = { min_height = 20 },
       },
     },
   })
