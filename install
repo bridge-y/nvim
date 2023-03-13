@@ -74,5 +74,5 @@ if [ -f /.dockerenv ]; then
 
   # cleanup
   sudo rm -rf /var/lib/apt/lists/*
-  rm -rf /tmp/*
+  sudo rm -rf /tmp/*
 fi
