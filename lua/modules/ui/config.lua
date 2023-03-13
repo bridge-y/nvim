@@ -5,7 +5,7 @@ local config = {}
 -- end
 
 function config.kanagawa()
-  vim.cmd('colorscheme kanagawa')
+  require("kanagawa").load("wave")
 end
 
 function config.barbecue()
