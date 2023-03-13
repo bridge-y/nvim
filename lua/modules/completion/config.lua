@@ -89,6 +89,20 @@ function config.lsp_zero()
   -- lsp.configure('diagnosticls', conf.dls())
   lsp.configure('pyright', conf.pyright())
 
+  -- lsp_signature
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
+  local lsp_signature_config = {
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    fix_pos = true, -- set to true, the floating window will not auto-close until finish all parameters
+    noice = true, -- set to true if you using noice to render markdown
+    handler_opts = {
+      border = 'rounded',
+    },
+  }
+  lsp.on_attach(function(client, bufnr)
+    require('lsp_signature').on_attach(lsp_signature_config, bufnr)
+  end)
+
   lsp.setup()
 
   -- lsp settings need to be located after lsp.setup()
@@ -111,7 +125,6 @@ function config.lsp_zero()
       { name = 'buffer' },
       { name = 'path' },
       { name = 'luasnip' },
-      { name = 'nvim_lsp_signature_help' },
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },

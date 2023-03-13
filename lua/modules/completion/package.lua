@@ -20,7 +20,7 @@ package({
     { 'saadparwaiz1/cmp_luasnip', config = conf.lua_snip }, -- Optional
     { 'hrsh7th/cmp-nvim-lua' }, -- Optional
     { 'onsails/lspkind.nvim' },
-    { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+    { 'ray-x/lsp_signature.nvim' },
 
     -- Utility
     { 'glepnir/lspsaga.nvim', config = conf.lspsaga },
