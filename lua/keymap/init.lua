@@ -115,3 +115,15 @@ nmap({
   { '<leader>go', cmd('Lspsaga outline'), opts(noremap, silent, 'LSP: Outline (Lspsaga)') },
 })
 vmap({ '<F4>', cmd('Lspsaga code_action'), opts(noremap, silent, 'LSP: Code Action (Lspsaga)') })
+
+-- Telekasten
+nmap({
+  { '<leader>zf', cmd('Telekasten find_notes'), opts(noremap, 'Telekasten: Find notes') },
+  { '<leader>zs', cmd('Telekasten search_notes'), opts(noremap, 'Telekasten: Search notes') },
+  { '<leader>zd', cmd('Telekasten goto_today'), opts(noremap, 'Telekasten: Goto today') },
+  { '<leader>zz', cmd('Telekasten follow_link'), opts(noremap, 'Telekasten: Follow link') },
+  { '<leader>zn', cmd('Telekasten new_note'), opts(noremap, 'Telekasten: New note') },
+  { '<leader>zc', cmd('Telekasten show_calendar'), opts(noremap, 'Telekasten: Show calendar') },
+  { '<leader>zb', cmd('Telekasten show_backlinks'), opts(noremap, 'Telekasten: Show backlinks') },
+  { '<leader>zI', cmd('Telekasten insert_img_link'), opts(noremap, 'Telekasten: Insert image link') },
+})

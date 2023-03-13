@@ -11,6 +11,7 @@ package({
     { 'nvim-telescope/telescope-file-browser.nvim' },
     { 'ahmedkhalf/project.nvim', event = 'BufReadPost', config = conf.project },
     { 'debugloop/telescope-undo.nvim' },
+    { 'nvim-telescope/telescope-media-files.nvim' },
   },
 })
 
@@ -73,4 +74,11 @@ package({
       config = conf.which_key,
     },
   },
+})
+
+package({
+  'renerocksai/telekasten.nvim',
+  cmd = 'Telekasten',
+  config = conf.telekasten,
+  dependencies = { 'nvim-telescope/telescope.nvim', 'renerocksai/calendar-vim' },
 })
