@@ -201,7 +201,7 @@ function config.lsp_zero()
 
   require('mason-null-ls').setup({
     ensure_installed = nil,
-    automatic_installation = true, -- You can still set this to `true`
+    automatic_installation = { exclude = { 'textlint' } },
     automatic_setup = true,
   })
 
