@@ -204,9 +204,6 @@ function config.lsp_zero()
     automatic_installation = { exclude = { 'textlint' } },
     automatic_setup = true,
   })
-
-  -- Required when `automatic_setup` is true
-  require('mason-null-ls').setup_handlers()
 end
 
 function config.cmp_cmdline()
