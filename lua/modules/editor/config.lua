@@ -41,7 +41,43 @@ function config.dial()
     default = {
       augend.integer.alias.decimal,
       augend.integer.alias.hex,
-      augend.date.alias['%Y/%m/%d'],
+      augend.date.alias['%Y/%m/%d'],  -- 2021/01/23, ...
+      augend.date.alias["%Y-%m-%d"],  -- 2021-01-04, ...
+      augend.date.new{
+        pattern = "%Y.%m.%d",
+        default_kind = "day",
+        -- if true, it does not match dates which does not exist, such as 2022/05/32
+        only_valid = true,
+        -- if true, it only matches dates with word boundary
+        word = false,
+    },  -- 2021.01.04, ...
+      augend.date.alias["%m/%d"],  -- 01/04, 02/28, 12/25, ...
+      augend.date.alias["%-m/%-d"], -- 1/4, 2/28. 12/25, ...
+      augend.date.alias["%Y年%-m月%-d日"],  -- 2021年1月4日, ...
+      augend.date.alias["%Y年%-m月%-d日(%ja)"],  -- 2021年1月4日(月), ...
+      augend.date.alias["%H:%M:%S"],  -- 14:30:00, ...
+      augend.date.alias["%H:%M"],  -- 14:30, ...
+      augend.constant.alias.ja_weekday,  -- 月, 火, ..., 土, 日
+      augend.constant.alias.ja_weekday_full, -- 月曜日, 火曜日, ..., 日曜日
+      augend.constant.alias.bool,  -- true, false
+      augend.constant.new({
+        elements = { 'and', 'or' },
+        word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+        cyclic = true, -- "or" is incremented into "and".
+      }),
+      augend.constant.new({
+        elements = { '&&', '||' },
+        word = false,
+        cyclic = true,
+      }),
+      augend.constant.new({
+        elements = { 'True', 'False' },
+        word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+        cyclic = true, -- "or" is incremented into "and".
+      }),  -- Python's bool
+      augend.hexcolor.new({
+        case = 'lower',
+      }),
     },
     visual = {
       augend.integer.alias.decimal,
