@@ -3,13 +3,18 @@ local conf = require('modules.completion.config')
 
 package({
   'VonHeikemen/lsp-zero.nvim',
-  branch = 'v1.x',
+  branch = 'v2.x',
   event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
-  config = conf.lsp_zero,
+  config = conf.lsp_zero_v2,
   dependencies = {
     -- LSP Support
     { 'neovim/nvim-lspconfig' }, -- Required
-    { 'williamboman/mason.nvim' }, -- Optional
+    {
+      'williamboman/mason.nvim',
+      build = function()
+        pcall(vim.cmd, 'MasonUpdate')
+      end,
+    }, -- Optional
     { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
     -- Autocompletion

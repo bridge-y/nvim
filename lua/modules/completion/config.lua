@@ -206,6 +206,169 @@ function config.lsp_zero()
   })
 end
 
+function config.lsp_zero_v2()
+  -- TODO: lazy load
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/lazy-loading-with-lazy-nvim.md
+
+  -- mason settings
+  require('mason').setup({
+    ui = {
+      border = 'rounded',
+    },
+  })
+
+  local lsp = require('lsp-zero').preset({
+    manage_nvim_cmp = {
+      set_sources = 'recommended', -- add cmp-buffer, cmp-path, cmp_luasnip, and cmp-nvim-lsp to sources
+      -- set_extra_mappings = ture, -- add <Ctrf-f>, <Ctrl-b>, <Tab>, and <Shift-Tab>
+    },
+  })
+
+  lsp.on_attach(function(client, bufnr)
+    lsp.default_keymaps({
+      buffer = bufnr,
+      omit = {
+        '<F2>',
+        'K',
+        'gd',
+        '[d',
+        ']d',
+        '<F4>',
+        'gl',
+      },
+    })
+  end)
+
+  lsp.set_sign_icons({
+    error = ' ',
+    warn = ' ',
+    info = ' ',
+    hint = ' ',
+  })
+
+  -- nlsp-settings requires jsonls
+  lsp.ensure_installed({
+    'jsonls',
+    'pyright',
+    -- "diagnosticls",
+  })
+
+  -- settings of server are located before .setup()
+  local conf = require('modules.completion.lspconfig')
+  -- lsp.configure('diagnosticls', conf.dls())
+  lsp.configure('pyright', conf.pyright())
+
+  -- lsp_signature
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
+  local lsp_signature_config = {
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    fix_pos = true, -- set to true, the floating window will not auto-close until finish all parameters
+    noice = true, -- set to true if you using noice to render markdown
+    handler_opts = {
+      border = 'rounded',
+    },
+  }
+  lsp.on_attach(function(client, bufnr)
+    require('lsp_signature').on_attach(lsp_signature_config, bufnr)
+  end)
+
+  lsp.setup()
+
+  -- lsp settings need to be located after lsp.setup()
+  local cmp = require('cmp')
+  local cmp_action = require('lsp-zero').cmp_action()
+  local lspkind = require('lspkind')
+
+  require('luasnip.loaders.from_vscode').lazy_load()
+
+  -- vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+
+  local cmp_config = lsp.defaults.cmp_config({
+    -- preselect = cmp.PreselectMode.Item,
+    completion = {
+      completeopt = 'menu,menuone,noinsert',
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    -- Note: if not intended mapping, complete following instruction
+    -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md
+    mapping = {
+      -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+      ['<C-c>'] = cmp.mapping.abort(),
+      ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+      ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+      ['<Tab>'] = cmp_action.luasnip_supertab(), -- enable to jump snippet placeholder
+      ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(), -- enable to jump snippet placeholder
+    },
+    formatting = {
+      fields = { 'menu', 'abbr', 'kind' },
+      format = lspkind.cmp_format({
+        mode = 'symbol', -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      }),
+    },
+  })
+
+  cmp.setup(cmp_config)
+
+  -- diagnostic text setting
+  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
+
+  -- null-ls settings
+  local null_ls = require('null-ls')
+  local null_opts = lsp.build_options('null-ls', {})
+
+  null_ls.setup({
+    -- on_attach = function(client, bufnr)
+    --   null_opts.on_attach(client, bufnr)
+    --
+    --   local format_cmd = function(input)
+    --     vim.lsp.buf.format({
+    --       id = client.id,
+    --       timeout_ms = 5000,
+    --       async = input.bang,
+    --     })
+    --   end
+    --
+    --   local bufcmd = vim.api.nvim_buf_create_user_command
+    --   bufcmd(bufnr, 'NullFormat', format_cmd, { bang = true, range = true, desc = 'Format using null-ls' })
+    -- end,
+    root_dir = require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git', 'pyproject.toml'),
+    sources = {
+      --- Replace these with the tools you have installed
+      null_ls.builtins.formatting.black.with({
+        extra_args = { '--config', 'pyproject.toml' },
+        condition = function(utils)
+          return utils.root_has_file({ 'pyproject.toml' })
+        end,
+      }),
+      null_ls.builtins.diagnostics.pyproject_flake8,
+      null_ls.builtins.formatting.isort,
+      null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.fish_indent,
+      null_ls.builtins.formatting.shfmt.with({
+        extra_args = { '-i', '2' },
+      }),
+      null_ls.builtins.formatting.prettier,
+      null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
+      null_ls.builtins.code_actions.shellcheck,
+      null_ls.builtins.code_actions.gitsigns,
+    },
+  })
+
+  require('mason-null-ls').setup({
+    ensure_installed = nil,
+    automatic_installation = { exclude = { 'textlint' } },
+    automatic_setup = true,
+  })
+end
+
 function config.cmp_cmdline()
   local cmp = require('cmp')
   cmp.setup.cmdline('/', {
