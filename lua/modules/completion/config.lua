@@ -220,7 +220,7 @@ function config.lsp_zero_v2()
   local lsp = require('lsp-zero').preset({
     manage_nvim_cmp = {
       set_sources = 'recommended', -- add cmp-buffer, cmp-path, cmp_luasnip, and cmp-nvim-lsp to sources
-      -- set_extra_mappings = ture, -- add <Ctrf-f>, <Ctrl-b>, <Tab>, and <Shift-Tab>
+      set_extra_mappings = true, -- add <Ctrf-f>, <Ctrl-b>, <Tab>, and <Shift-Tab>
     },
   })
 
@@ -238,6 +238,9 @@ function config.lsp_zero_v2()
       },
     })
   end)
+
+  -- diagnostic text setting
+  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
 
   lsp.set_sign_icons({
     error = ' ',
@@ -298,10 +301,10 @@ function config.lsp_zero_v2()
       -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
       ['<C-c>'] = cmp.mapping.abort(),
-      ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-      ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-      ['<Tab>'] = cmp_action.luasnip_supertab(), -- enable to jump snippet placeholder
-      ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(), -- enable to jump snippet placeholder
+      -- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+      -- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+      -- ['<Tab>'] = cmp_action.luasnip_supertab(), -- enable to jump snippet placeholder
+      -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(), -- enable to jump snippet placeholder
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
@@ -316,9 +319,6 @@ function config.lsp_zero_v2()
   })
 
   cmp.setup(cmp_config)
-
-  -- diagnostic text setting
-  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
 
   -- null-ls settings
   local null_ls = require('null-ls')
