@@ -20,7 +20,7 @@ function config.lua_snip()
   require('luasnip.loaders.from_vscode').lazy_load({ paths = { './snippets/' } })
 end
 
-function config.lsp_zero()
+function config.lsp_zero_v1()
   -- local keymap = require('core.keymap')
   -- local nmap = keymap.nmap
   -- local cmd = keymap.cmd
@@ -207,15 +207,30 @@ function config.lsp_zero()
 end
 
 function config.lsp_zero_v2()
-  -- TODO: lazy load
-  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/lazy-loading-with-lazy-nvim.md
-
   -- mason settings
   require('mason').setup({
     ui = {
       border = 'rounded',
     },
   })
+
+  -- nlsp-settings setting
+  local nlspsettings = require('nlspsettings')
+
+  nlspsettings.setup({
+    config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
+    local_settings_dir = '.nlsp-settings',
+    local_settings_root_markers_fallback = { '.git' },
+    append_default_schemas = true,
+    loader = 'json',
+  })
+
+  -- neoconf settings
+  -- needs to be located before nvim-lspconfig
+  local neoconf_ok, neoconf = pcall(require, 'neoconf')
+  if neoconf_ok then
+    neoconf.setup({})
+  end
 
   local lsp = require('lsp-zero').preset({
     manage_nvim_cmp = {
@@ -366,6 +381,167 @@ function config.lsp_zero_v2()
     ensure_installed = nil,
     automatic_installation = { exclude = { 'textlint' } },
     automatic_setup = true,
+  })
+end
+
+function config.lsp_zero()
+  require('lsp-zero.settings').preset({})
+end
+
+function config.nvim_cmp()
+  local lsp = require('lsp-zero')
+  local cmp_action = require('lsp-zero').cmp_action()
+  lsp.extend_cmp()
+
+  local cmp = require('cmp')
+  local lspkind = require('lspkind')
+
+  require('luasnip.loaders.from_vscode').lazy_load()
+
+  local cmp_config = lsp.defaults.cmp_config({
+    -- preselect = cmp.PreselectMode.Item,
+    completion = {
+      completeopt = 'menu,menuone,noinsert',
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    -- Note: if not intended mapping, complete following instruction
+    -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md
+    mapping = {
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+      ['<C-c>'] = cmp.mapping.abort(),
+      ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+      ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+      ['<Tab>'] = cmp_action.tab_complete(),
+      ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
+    },
+    formatting = {
+      fields = { 'menu', 'abbr', 'kind' },
+      format = lspkind.cmp_format({
+        mode = 'symbol', -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      }),
+    },
+  })
+
+  cmp.setup(cmp_config)
+end
+
+function config.nvim_lspconfig()
+  local lsp = require('lsp-zero')
+
+  lsp.on_attach(function(client, bufnr)
+    lsp.default_keymaps({
+      buffer = bufnr,
+      omit = {
+        '<F2>',
+        'K',
+        'gd',
+        '[d',
+        ']d',
+        '<F4>',
+        'gl',
+      },
+    })
+  end)
+
+  -- diagnostic text setting
+  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
+
+  lsp.set_sign_icons({
+    error = ' ',
+    warn = ' ',
+    info = ' ',
+    hint = ' ',
+  })
+
+  -- nlsp-settings requires jsonls
+  lsp.ensure_installed({
+    'jsonls',
+    'pyright',
+    -- "diagnosticls",
+  })
+
+  -- settings of server are located before .setup()
+  local conf = require('modules.completion.lspconfig')
+  -- lsp.configure('diagnosticls', conf.dls())
+  lsp.configure('pyright', conf.pyright())
+
+  -- lsp_signature
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
+  local lsp_signature_config = {
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    fix_pos = true, -- set to true, the floating window will not auto-close until finish all parameters
+    noice = true, -- set to true if you using noice to render markdown
+    handler_opts = {
+      border = 'rounded',
+    },
+  }
+  lsp.on_attach(function(client, bufnr)
+    require('lsp_signature').on_attach(lsp_signature_config, bufnr)
+  end)
+
+  -- format on save
+  lsp.format_on_save({
+    format_opts = {
+      timeout_ms = 10000,
+    },
+    servers = {
+      ['null-ls'] = { 'python', 'markdown', 'telekasten', 'lua' },
+    },
+  })
+
+  lsp.setup()
+end
+
+function config.null_ls()
+  local null_ls = require('null-ls')
+
+  null_ls.setup({
+    root_dir = require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git', 'pyproject.toml'),
+    sources = {
+      --- Replace these with the tools you have installed
+      null_ls.builtins.formatting.black.with({
+        extra_args = { '--config', 'pyproject.toml' },
+        condition = function(utils)
+          return utils.root_has_file({ 'pyproject.toml' })
+        end,
+      }),
+      null_ls.builtins.diagnostics.pyproject_flake8,
+      null_ls.builtins.formatting.isort,
+      null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.fish_indent,
+      null_ls.builtins.formatting.shfmt.with({
+        extra_args = { '-i', '2' },
+      }),
+      null_ls.builtins.formatting.prettier,
+      null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
+      null_ls.builtins.code_actions.shellcheck,
+      null_ls.builtins.code_actions.gitsigns,
+    },
+  })
+
+  require('mason-null-ls').setup({
+    ensure_installed = nil,
+    automatic_installation = { exclude = { 'textlint' } },
+    automatic_setup = true,
+  })
+end
+
+function config.nlspsettings()
+  local nlspsettings = require('nlspsettings')
+
+  nlspsettings.setup({
+    config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
+    local_settings_dir = '.nlsp-settings',
+    local_settings_root_markers_fallback = { '.git' },
+    append_default_schemas = true,
+    loader = 'json',
   })
 end
 
