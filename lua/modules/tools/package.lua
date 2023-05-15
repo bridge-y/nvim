@@ -82,3 +82,11 @@ package({
   config = conf.telekasten,
   dependencies = { 'nvim-telescope/telescope.nvim', 'renerocksai/calendar-vim' },
 })
+
+package({
+  'keaising/im-select.nvim',
+  event = { 'InsertEnter' },
+  config = function()
+    require('im_select').setup()
+  end,
+})
