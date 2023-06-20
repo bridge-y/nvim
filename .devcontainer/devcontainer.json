@@ -7,7 +7,7 @@
     "args": {
       "VARIANT": "jammy",
       "NEOVIM_VERSION": "nightly",
-      "LAZYGIT_VERSION": "0.37.0",
+      "LAZYGIT_VERSION": "0.38.2",
       "DELTA_VERSION": "0.15.1"
     }
   },
