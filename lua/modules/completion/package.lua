@@ -85,3 +85,13 @@ package({
 })
 
 package({ 'windwp/nvim-autopairs', event = 'InsertEnter', config = conf.auto_pairs })
+-- Ai coding
+package({
+  'jcdickinson/codeium.nvim',
+  config = true,
+  ft = { 'python', 'go', 'rust' },
+  dependencies = {
+    { 'nvim-lua/plenary.nvim' },
+    { 'jcdickinson/http.nvim', build = 'cargo build --workspace --release' },
+  },
+})

@@ -125,6 +125,7 @@ function config.lsp_zero_v1()
       { name = 'buffer' },
       { name = 'path' },
       { name = 'luasnip' },
+      { name = 'codeium' },
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
@@ -134,6 +135,7 @@ function config.lsp_zero_v1()
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        symbol_map = { Codeium = '' },
       }),
     },
   })
@@ -321,6 +323,14 @@ function config.lsp_zero_v2()
       -- ['<Tab>'] = cmp_action.luasnip_supertab(), -- enable to jump snippet placeholder
       -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(), -- enable to jump snippet placeholder
     },
+    sources = {
+      { name = 'nvim_lsp' },
+      { name = 'buffer' },
+      { name = 'path' },
+      { name = 'luasnip' },
+      { name = 'codeium' },
+    },
+
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
       format = lspkind.cmp_format({
@@ -329,6 +339,7 @@ function config.lsp_zero_v2()
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        symbol_map = { Codeium = '' },
       }),
     },
   })
@@ -417,6 +428,13 @@ function config.nvim_cmp()
       ['<Tab>'] = cmp_action.tab_complete(),
       ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
     },
+    sources = {
+      { name = 'nvim_lsp' },
+      { name = 'buffer' },
+      { name = 'path' },
+      { name = 'luasnip' },
+      { name = 'codeium' },
+    },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
       format = lspkind.cmp_format({
@@ -425,6 +443,7 @@ function config.nvim_cmp()
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        symbol_map = { Codeium = '' },
       }),
     },
   })
