@@ -270,6 +270,8 @@ function config.lsp_zero_v2()
   lsp.ensure_installed({
     'jsonls',
     'pyright',
+    'rust_analyzer',
+    'gopls',
     -- "diagnosticls",
   })
 
