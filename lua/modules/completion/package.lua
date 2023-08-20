@@ -31,6 +31,7 @@ package({
         { 'hrsh7th/cmp-nvim-lsp-document-symbol' },
       },
     },
+    { 'lukas-reineke/cmp-under-comparator' },
   },
   config = conf.nvim_cmp,
 })

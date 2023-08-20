@@ -430,6 +430,18 @@ function config.nvim_cmp()
       ['<Tab>'] = cmp_action.tab_complete(),
       ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
     },
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        require('cmp-under-comparator').under,
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      },
+    },
     sources = {
       { name = 'nvim_lsp' },
       { name = 'buffer' },
