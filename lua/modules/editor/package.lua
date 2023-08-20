@@ -45,3 +45,11 @@ package({
   event = 'UIEnter',
   config = conf.toggleterm,
 })
+
+package({
+  'NvChad/nvim-colorizer.lua',
+  event = 'UIEnter',
+  config = function()
+    require('colorizer').setup({})
+  end,
+})
