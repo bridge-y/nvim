@@ -134,6 +134,15 @@ function config.nvim_tree()
     disable_netrw = false,
     hijack_cursor = true,
     hijack_netrw = true,
+    filters = {
+      custom = {
+        '.git',
+        'venv',
+        '.venv',
+        'node_modules',
+        '__pycache__',
+      },
+    },
   })
 end
 
