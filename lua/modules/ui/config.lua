@@ -5,7 +5,7 @@ local config = {}
 -- end
 
 function config.kanagawa()
-  require("kanagawa").load("wave")
+  require('kanagawa').load('wave')
 end
 
 function config.barbecue()
