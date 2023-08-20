@@ -492,6 +492,7 @@ function config.nvim_lspconfig()
   local conf = require('modules.completion.lspconfig')
   -- lsp.configure('diagnosticls', conf.dls())
   lsp.configure('pyright', conf.pyright())
+  lsp.configure('rust_analyzer', conf.rust_analyzer())
 
   -- lsp_signature
   -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69

@@ -55,6 +55,31 @@ function config.pylsp()
   return settings
 end
 
+function config.rust_analyzer()
+  local settings = {
+    settings = {
+      ['rust-analyzer'] = {
+        imports = {
+          granularity = {
+            group = 'module',
+          },
+          prefix = 'self',
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+    },
+  }
+
+  return settings
+end
+
 function config.dls()
   local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
   if not lspconfig_ok then
