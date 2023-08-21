@@ -80,7 +80,7 @@ package({
   'renerocksai/telekasten.nvim',
   cmd = 'Telekasten',
   config = conf.telekasten,
-  dependencies = { 'nvim-telescope/telescope.nvim', 'renerocksai/calendar-vim' },
+  dependencies = { 'nvim-telescope/telescope.nvim' },
 })
 
 package({
@@ -88,5 +88,14 @@ package({
   event = { 'InsertEnter' },
   config = function()
     require('im_select').setup()
+  end,
+})
+
+package({
+  'pwntester/octo.nvim',
+  cmd = { 'Octo' },
+  config = function()
+    require('octo').setup()
+    vim.treesitter.language.register('markdown', 'octo')
   end,
 })
