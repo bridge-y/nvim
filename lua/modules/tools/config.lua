@@ -193,7 +193,7 @@ function config.telekasten()
     image_link_style = 'markdown',
 
     -- integrate with calendar-vim
-    plug_into_calendar = true,
+    plug_into_calendar = false,
     calendar_opts = {
       -- calendar week display mode: 1 .. 'WK01', 2 .. 'WK 1', 3 .. 'KW01', 4 .. 'KW 1', 5 .. '1'
       weeknm = 4,

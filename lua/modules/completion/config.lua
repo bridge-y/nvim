@@ -448,6 +448,7 @@ function config.nvim_cmp()
       { name = 'path' },
       { name = 'luasnip' },
       { name = 'codeium' },
+      { name = 'git' },
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
@@ -526,7 +527,7 @@ function config.nvim_lspconfig()
       timeout_ms = 10000,
     },
     servers = {
-      ['null-ls'] = { 'python', 'markdown', 'telekasten', 'lua' },
+      ['null-ls'] = { 'python', 'markdown', 'telekasten', 'lua', 'octo' },
     },
   })
 
@@ -553,8 +554,11 @@ function config.null_ls()
       null_ls.builtins.formatting.shfmt.with({
         extra_args = { '-i', '2' },
       }),
-      null_ls.builtins.formatting.prettier,
-      null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
+      -- null_ls.builtins.formatting.prettier,
+      -- null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
+      null_ls.builtins.formatting.prettier.with({ extra_filetypes = { 'telekasten', 'octo' } }),
+      null_ls.builtins.formatting.textlint.with({ extra_filetypes = { 'telekasten', 'octo' } }),
+      null_ls.builtins.diagnostics.textlint.with({ extra_filetypes = { 'telekasten' } }),
       null_ls.builtins.code_actions.shellcheck,
       null_ls.builtins.code_actions.gitsigns,
     },

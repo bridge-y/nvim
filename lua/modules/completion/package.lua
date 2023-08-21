@@ -17,6 +17,7 @@ package({
     { 'hrsh7th/cmp-path' }, -- Optional
     { 'saadparwaiz1/cmp_luasnip', config = conf.lua_snip }, -- Optional
     { 'hrsh7th/cmp-nvim-lua' }, -- Optional
+    { 'petertriho/cmp-git' }, -- Optional
     { 'onsails/lspkind.nvim' },
     { 'ray-x/lsp_signature.nvim' },
     -- Snippets
