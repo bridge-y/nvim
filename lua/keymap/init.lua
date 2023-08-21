@@ -130,16 +130,16 @@ nmap({
 
 -- dial.nvim
 nmap({
-  { '<C-a>', require("dial.map").inc_normal(), opts(noremap, silent, 'dial.nvim: increment') },
-  { '<C-x>', require("dial.map").dec_normal(), opts(noremap, silent, 'dial.nvim: decrement') },
-  { 'g<C-a>', require("dial.map").inc_gnormal(), opts(noremap, silent, 'dial.nvim: increment') },
-  { 'g<C-x>', require("dial.map").dec_gnormal(), opts(noremap, silent, 'dial.nvim: decrement') },
+  { '<C-a>', require('dial.map').inc_normal(), opts(noremap, silent, 'dial.nvim: increment') },
+  { '<C-x>', require('dial.map').dec_normal(), opts(noremap, silent, 'dial.nvim: decrement') },
+  { 'g<C-a>', require('dial.map').inc_gnormal(), opts(noremap, silent, 'dial.nvim: increment') },
+  { 'g<C-x>', require('dial.map').dec_gnormal(), opts(noremap, silent, 'dial.nvim: decrement') },
 })
 vmap({
-  { '<C-a>', require("dial.map").inc_visual(), opts(noremap, silent, 'dial.nvim: increment') },
-  { '<C-x>', require("dial.map").dec_visual(), opts(noremap, silent, 'dial.nvim: decrement') },
-  { 'g<C-a>', require("dial.map").inc_gvisual(), opts(noremap, silent, 'dial.nvim: increment') },
-  { 'g<C-x>', require("dial.map").dec_gvisual(), opts(noremap, silent, 'dial.nvim: decrement') },
+  { '<C-a>', require('dial.map').inc_visual(), opts(noremap, silent, 'dial.nvim: increment') },
+  { '<C-x>', require('dial.map').dec_visual(), opts(noremap, silent, 'dial.nvim: decrement') },
+  { 'g<C-a>', require('dial.map').inc_gvisual(), opts(noremap, silent, 'dial.nvim: increment') },
+  { 'g<C-x>', require('dial.map').dec_gvisual(), opts(noremap, silent, 'dial.nvim: decrement') },
 -- Quick operation for my scraps using Octo
 nmap({
   { '<leader>ss', cmd('Octo issue list bridge-y/scraps'), opts(noremap, 'Octo: show my scraps') },

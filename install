@@ -64,7 +64,7 @@ if [ -f /.dockerenv ]; then
   # Commitizen
   sudo npm install -g commitizen
   sudo npm install -g cz-conventional-changelog
-  echo '{ "path": "cz-conventional-changelog" }' > ~/.czrc
+  echo '{ "path": "cz-conventional-changelog" }' >~/.czrc
 
   # Neovim
   mkdir -p /tmp/
