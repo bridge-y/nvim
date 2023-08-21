@@ -53,3 +53,12 @@ package({
     require('colorizer').setup({})
   end,
 })
+
+package({
+  'smoka7/hop.nvim',
+  version = '*',
+  event = { 'CursorHold', 'CursorHoldI' },
+  config = function()
+    require('hop').setup({ keys = 'etovxqpdygfblzhckisuran' })
+  end,
+})

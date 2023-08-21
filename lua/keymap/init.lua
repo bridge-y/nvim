@@ -140,6 +140,24 @@ vmap({
   { '<C-x>', require('dial.map').dec_visual(), opts(noremap, silent, 'dial.nvim: decrement') },
   { 'g<C-a>', require('dial.map').inc_gvisual(), opts(noremap, silent, 'dial.nvim: increment') },
   { 'g<C-x>', require('dial.map').dec_gvisual(), opts(noremap, silent, 'dial.nvim: decrement') },
+})
+
+-- hop.nvim
+nmap({
+  { '<leader>w', cmd('HopWordMW'), opts(noremap, 'jump: Goto word') },
+  { '<leader>j', cmd('HopLineMW'), opts(noremap, 'jump: Goto line') },
+  { '<leader>k', cmd('HopLineMW'), opts(noremap, 'jump: Goto line') },
+  { '<leader>c', cmd('HopChar1MW'), opts(noremap, 'jump: Goto one char') },
+  { '<leader>cc', cmd('HopChar2MW'), opts(noremap, 'jump: Goto two chars') },
+})
+vmap({
+  { '<leader>w', cmd('HopWordMW'), opts(noremap, 'jump: Goto word') },
+  { '<leader>j', cmd('HopLineMW'), opts(noremap, 'jump: Goto line') },
+  { '<leader>k', cmd('HopLineMW'), opts(noremap, 'jump: Goto line') },
+  { '<leader>c', cmd('HopChar1MW'), opts(noremap, 'jump: Goto one char') },
+  { '<leader>cc', cmd('HopChar2MW'), opts(noremap, 'jump: Goto two chars') },
+})
+
 -- Quick operation for my scraps using Octo
 nmap({
   { '<leader>ss', cmd('Octo issue list bridge-y/scraps'), opts(noremap, 'Octo: show my scraps') },
