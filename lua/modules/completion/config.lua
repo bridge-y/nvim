@@ -502,6 +502,10 @@ function config.nvim_lspconfig()
   lsp.ensure_installed({
     'jsonls',
     'pyright',
+    'rust_analyzer',
+    'dockerls',
+    'docker_compose_language_service',
+    'marksman',
     -- "diagnosticls",
   })
 
