@@ -99,3 +99,12 @@ package({
     vim.treesitter.language.register('markdown', 'octo')
   end,
 })
+
+package({
+  'stevearc/overseer.nvim',
+  cmd = { 'OverseerRun', 'OverseerToggle' },
+  config = function()
+    require('overseer').setup()
+  end,
+})
+
