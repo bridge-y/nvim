@@ -147,6 +147,18 @@ function config.nvim_tree()
 end
 
 function config.noice()
+  local function myMiniView(pattern, kind)
+    kind = kind or ''
+    return {
+      view = 'mini',
+      filter = {
+        event = 'msg_show',
+        kind = kind,
+        find = pattern,
+      },
+    }
+  end
+
   require('noice').setup({
     lsp = {
       -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -182,11 +194,24 @@ function config.noice()
       lsp_doc_border = false, -- add a border to hover docs and signature help
     },
     routes = {
+      {
+        filter = {
+          event = 'notify',
+          kind = 'info',
+          find = 'keymap must has rhs',
+        },
+        opts = { skip = true },
+      },
       -- https://github.com/folke/noice.nvim/issues/331
       {
         view = 'split',
         filter = { min_height = 20 },
+        filter = {
+          event = 'notify',
+          min_height = 20,
+        },
       },
+      myMiniView('[w]'),
     },
   })
 end
