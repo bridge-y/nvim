@@ -91,7 +91,14 @@ package({
   config = conf.null_ls,
 })
 
-package({ 'windwp/nvim-autopairs', event = 'InsertEnter', config = conf.auto_pairs })
+package({
+  'hrsh7th/nvim-insx',
+  event = 'InsertEnter',
+  config = function()
+    require('insx.preset.standard').setup()
+  end,
+})
+
 -- Ai coding
 package({
   'jcdickinson/codeium.nvim',
