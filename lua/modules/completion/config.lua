@@ -401,21 +401,17 @@ end
 --   })
 -- end
 
-function config.lsp_zero()
-  require('lsp-zero.settings').preset({})
-end
-
 function config.nvim_cmp()
-  local lsp = require('lsp-zero')
-  local cmp_action = require('lsp-zero').cmp_action()
-  lsp.extend_cmp()
+  local lsp_zero = require('lsp-zero')
+  local cmp_action = lsp_zero.cmp_action()
+  lsp_zero.extend_cmp()
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
 
   require('luasnip.loaders.from_vscode').lazy_load()
 
-  local cmp_config = lsp.defaults.cmp_config({
+  local cmp_config = lsp_zero.defaults.cmp_config({
     -- preselect = cmp.PreselectMode.Item,
     completion = {
       completeopt = 'menu,menuone,noinsert',
@@ -429,8 +425,15 @@ function config.nvim_cmp()
     mapping = {
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
       ['<C-c>'] = cmp.mapping.abort(),
+
+      -- Navigate between snippet placeholder
       ['<C-f>'] = cmp_action.luasnip_jump_forward(),
       ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+      -- Scroll up and down in the completion documentation
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+
       ['<Tab>'] = cmp_action.tab_complete(),
       ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
     },
@@ -471,49 +474,8 @@ function config.nvim_cmp()
 end
 
 function config.nvim_lspconfig()
-  local lsp = require('lsp-zero')
-
-  lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({
-      buffer = bufnr,
-      omit = {
-        '<F2>',
-        'K',
-        'gd',
-        '[d',
-        ']d',
-        '<F4>',
-        'gl',
-      },
-    })
-  end)
-
-  -- diagnostic text setting
-  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
-
-  lsp.set_sign_icons({
-    error = ' ',
-    warn = ' ',
-    info = ' ',
-    hint = ' ',
-  })
-
-  -- nlsp-settings requires jsonls
-  lsp.ensure_installed({
-    'jsonls',
-    'pyright',
-    'rust_analyzer',
-    'dockerls',
-    'docker_compose_language_service',
-    'marksman',
-    -- "diagnosticls",
-  })
-
-  -- settings of server are located before .setup()
-  local conf = require('modules.completion.lspconfig')
-  -- lsp.configure('diagnosticls', conf.dls())
-  lsp.configure('pyright', conf.pyright())
-  lsp.configure('rust_analyzer', conf.rust_analyzer())
+  local lsp_zero = require('lsp-zero')
+  lsp_zero.extend_lspconfig()
 
   -- lsp_signature
   -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
@@ -525,21 +487,74 @@ function config.nvim_lspconfig()
       border = 'rounded',
     },
   }
-  lsp.on_attach(function(client, bufnr)
+
+  lsp_zero.on_attach(function(client, bufnr)
+    lsp_zero.default_keymaps({
+      buffer = bufnr,
+      omit = {
+        '<F2>',
+        'K',
+        'gd',
+        '[d',
+        ']d',
+        '<F4>',
+        'gl',
+      },
+    })
     require('lsp_signature').on_attach(lsp_signature_config, bufnr)
   end)
 
+  -- diagnostic text setting
+  vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
+
+  lsp_zero.set_sign_icons({
+    error = ' ',
+    warn = ' ',
+    info = ' ',
+    hint = ' ',
+  })
+
+  local conf = require('modules.completion.lspconfig')
+
+  require('mason-lspconfig').setup({
+    ensure_installed = {
+      -- nlsp-settings requires jsonls
+      'jsonls',
+      'pyright',
+      'rust_analyzer',
+      'dockerls',
+      'docker_compose_language_service',
+      'marksman',
+      -- "diagnosticls",
+    },
+    handlers = {
+      lsp_zero.default_setup,
+      lua_ls = function()
+        local lua_opts = lsp_zero.nvim_lua_ls()
+        require('lspconfig').lua_ls.setup(lua_opts)
+      end,
+      pyright = function()
+        require('lspconfig').pyright.setup(conf.pyright())
+      end,
+      rust_analyzer = function()
+        require('lspconfig').rust_analyzer.setup(conf.rust_analyzer())
+      end,
+      -- diagnosticls = function()
+      --   lsp.configure('diagnosticls', conf.dls())
+      -- end,
+    },
+  })
+
   -- format on save
-  lsp.format_on_save({
+  lsp_zero.format_on_save({
     format_opts = {
       timeout_ms = 10000,
     },
     servers = {
       ['null-ls'] = { 'python', 'markdown', 'telekasten', 'lua', 'octo' },
+      ['rust_analyzer'] = { 'rust' },
     },
   })
-
-  lsp.setup()
 end
 
 function config.null_ls()

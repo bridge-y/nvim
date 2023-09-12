@@ -3,9 +3,20 @@ local conf = require('modules.completion.config')
 
 package({
   'VonHeikemen/lsp-zero.nvim',
-  branch = 'v2.x',
+  branch = 'v3.x',
   lazy = true,
-  config = conf.lsp_zero,
+  config = false,
+  init = function()
+    -- Disable automatic setup, we are doing it manually
+    vim.g.lsp_zero_extend_cmp = 0
+    vim.g.lsp_zero_extend_lspconfig = 0
+  end,
+})
+
+package({
+  'williamboman/mason.nvim',
+  lazy = false,
+  config = true,
 })
 
 -- Autocompletion
@@ -39,17 +50,11 @@ package({
 
 package({
   'neovim/nvim-lspconfig',
-  cmd = 'LspInfo',
+  cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
   event = { 'BufReadPre', 'BufNewFile', 'BufNew' },
   dependencies = {
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'williamboman/mason-lspconfig.nvim' },
-    {
-      'williamboman/mason.nvim',
-      build = function()
-        pcall(vim.cmd, 'MasonUpdate')
-      end,
-    },
 
     -- Utility
     { 'glepnir/lspsaga.nvim', config = conf.lspsaga },
