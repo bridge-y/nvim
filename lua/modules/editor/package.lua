@@ -34,8 +34,10 @@ package({
 package({
   'monaqa/dial.nvim',
   keys = {
-    { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = { 'n', 'v' } },
-    { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = { 'n', 'v' } },
+    { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: increment' },
+    { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: decrement' },
+    { 'g<C-a>', 'g<Plug>(dial-increment)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: increment' },
+    { 'g<C-x>', 'g<Plug>(dial-decrement)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: decrement' },
   },
   config = conf.dial,
 })
