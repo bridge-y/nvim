@@ -106,15 +106,17 @@ nmap({
     end,
     opts(noremap, silent, expr, 'LSP: Rename (inc_rename)'),
   },
-  { 'gd', cmd('Lspsaga lsp_finder'), opts(noremap, silent, 'LSP: Lsp finder (Lspsaga)') },
+  { 'gd', cmd('Glance definitions'), opts(noremap, silent, 'LSP: Preview definition') },
+  { 'gD', cmd('Lspsaga goto_definition'), opts(noremap, silent, 'LSP: Go to definition') },
   { 'gp', cmd('Lspsaga peek_definition'), opts(noremap, silent, 'LSP: Peek definition (Lspsaga)') },
+  { 'gh', cmd('Glance references'), opts(noremap, silent, 'LSP: Show reference') },
   { '[d', cmd('Lspsaga diagnostic_jump_prev'), opts(noremap, silent, 'LSP: Prev diagnostic (Lspsaga)') },
   { ']d', cmd('Lspsaga diagnostic_jump_next'), opts(noremap, silent, 'LSP: Next diagnostic (Lspsaga)') },
   { '<F4>', cmd('Lspsaga code_action'), opts(noremap, silent, 'LSP: Code action (Lspsaga)') },
   { 'gl', cmd('Lspsaga show_line_diagnostics'), opts(noremap, silent, 'LSP: Show line diagnostic (Lspsaga)') },
-  { '<leader>go', cmd('Lspsaga outline'), opts(noremap, silent, 'LSP: Outline (Lspsaga)') },
+  { 'go', cmd('Lspsaga outline'), opts(noremap, silent, 'LSP: Outline (Lspsaga)') },
+  { 'ga', cmd('Lspsaga code_action'), opts(noremap, silent, 'LSP: Code action') },
 })
-vmap({ '<F4>', cmd('Lspsaga code_action'), opts(noremap, silent, 'LSP: Code Action (Lspsaga)') })
 
 -- Telekasten
 nmap({

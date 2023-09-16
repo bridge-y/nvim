@@ -57,13 +57,6 @@ package({
     { 'williamboman/mason-lspconfig.nvim' },
 
     -- Utility
-    { 'glepnir/lspsaga.nvim', config = conf.lspsaga },
-    {
-      'smjonas/inc-rename.nvim',
-      config = function()
-        require('inc_rename').setup()
-      end,
-    },
 
     -- LSP setting
     {
@@ -82,6 +75,20 @@ package({
     },
   },
   config = conf.nvim_lspconfig,
+})
+
+package({
+  'glepnir/lspsaga.nvim',
+  event = 'LspAttach',
+  config = conf.lspsaga,
+})
+
+package({
+  'dnlhc/glance.nvim',
+  event = 'LspAttach',
+  config = function()
+    require('glance').setup()
+  end,
 })
 
 package({

@@ -64,3 +64,12 @@ package({
     require('hop').setup({ keys = 'etovxqpdygfblzhckisuran' })
   end,
 })
+
+package({
+  'smjonas/inc-rename.nvim',
+  event = { 'CursorHold', 'CursorHoldI' },
+  config = function()
+    require('inc_rename').setup()
+  end,
+})
+
