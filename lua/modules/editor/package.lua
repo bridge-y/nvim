@@ -73,3 +73,6 @@ package({
   end,
 })
 
+package({
+  'LunarVim/bigfile.nvim',
+})
