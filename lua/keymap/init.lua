@@ -37,27 +37,25 @@ xmap({ ' ', '', opts(noremap) })
 nmap({
   -- noremal remap
   -- close buffer
-  { '<C-x>k', cmd('bdelete'), opts(noremap, silent) },
+  { '<C-x>k', cmd('bdelete'), opts(noremap, silent, 'Close buffer') },
   -- save
-  { '<C-s>', cmd('write'), opts(noremap) },
+  { '<C-s>', cmd('write'), opts(noremap, 'Save') },
   -- yank
-  { 'Y', 'y$', opts(noremap) },
+  { 'Y', 'y$', opts(noremap, 'Yank') },
   -- buffer jump
-  { ']b', cmd('bn'), opts(noremap) },
-  { '[b', cmd('bp'), opts(noremap) },
-  -- remove trailing white space
-  { '<Leader>t', cmd('TrimTrailingWhitespace'), opts(noremap) },
+  { ']b', cmd('bn'), opts(noremap, 'Buffer: next') },
+  { '[b', cmd('bp'), opts(noremap, 'Buffer: previous') },
   -- window jump
-  { '<C-h>', '<C-w>h', opts(noremap) },
-  { '<C-l>', '<C-w>l', opts(noremap) },
-  { '<C-j>', '<C-w>j', opts(noremap) },
-  { '<C-k>', '<C-w>k', opts(noremap) },
+  { '<C-h>', '<C-w>h', opts(noremap, 'Window: jump left') },
+  { '<C-l>', '<C-w>l', opts(noremap, 'Window: jump right') },
+  { '<C-j>', '<C-w>j', opts(noremap, 'Window: jump down') },
+  { '<C-k>', '<C-w>k', opts(noremap, 'Window: jump up') },
 })
 
 imap({
   -- insert mode
-  { '<C-h>', '<Bs>', opts(noremap) },
-  { '<C-e>', '<End>', opts(noremap) },
+  { '<C-h>', '<Bs>', opts(noremap, 'Insert Mode: backspace') },
+  { '<C-e>', '<End>', opts(noremap, 'Insert Mode: move end of line') },
 })
 
 -- commandline remap
@@ -87,7 +85,7 @@ nmap({
   { '<C-p>', cmd('Telescope keymaps') },
 
   -- lazygit
-  { '<Leader>lg', cmd('lua _lazygit_toggle()'), opts(noremap, silent, 'Git: Toggle lazygit') },
+  { '<Leader>lg', cmd('lua _lazygit_toggle( )'), opts(noremap, silent, 'Git: Toggle lazygit') },
 
   -- legendary
   -- {'<C-p>', cmd('Legendary')}
