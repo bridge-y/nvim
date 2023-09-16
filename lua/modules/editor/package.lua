@@ -3,7 +3,7 @@ local conf = require('modules.editor.config')
 
 package({
   'nvim-treesitter/nvim-treesitter',
-  event = 'BufRead',
+  event = 'BufReadPost',
   run = ':TSUpdate',
   config = conf.nvim_treesitter,
   dependencies = {
@@ -27,7 +27,7 @@ package({
 
 package({
   'ethanholz/nvim-lastplace',
-  event = { 'BufRead' },
+  event = { 'BufReadPost' },
   config = conf.nvim_lastplace,
 })
 
