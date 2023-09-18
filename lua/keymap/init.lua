@@ -146,6 +146,11 @@ vmap({
 
 -- Quick operation for my scraps using Octo
 nmap({
-  { '<leader>ss', cmd('Octo issue list bridge-y/scraps'), opts(noremap, 'Octo: show my scraps') },
+  { '<leader>ss', cmd('Octo issue list bridge-y/scraps'), opts(noremap, 'Octo: show my open scraps') },
+  {
+    '<leader>sS',
+    cmd('Octo issue list bridge-y/scraps states=OPEN,CLOSED'),
+    opts(noremap, 'Octo: show my all scraps'),
+  },
   { '<leader>sc', cmd('Octo issue create bridge-y/scraps'), opts(noremap, 'Octo: create a scrap') },
 })
