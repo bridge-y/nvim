@@ -15,3 +15,9 @@ package({
   config = conf.crates,
 })
 
+package({
+  'lukas-reineke/headlines.nvim',
+  ft = { 'markdown', 'telekasten', 'yaml' },
+  config = conf.headlines,
+})
+
