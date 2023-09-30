@@ -6,6 +6,11 @@ ARG NEOVIM_VERSION
 ARG LAZYGIT_VERSION
 ARG DELTA_VERSION
 
+ENV RUST_HOME="/opt/rust"
+ENV RUSTUP_HOME="${RUST_HOME}/rustup"
+ENV CARGO_HOME="${RUST_HOME}/cargo"
+ENV PATH="${CARGO_HOME}/bin:${PATH}"
+
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install --no-install-recommends \
@@ -31,6 +36,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   # utility
   ripgrep \
   fish \
+  # http.nvim requires rust
+  && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh \
   # gh
   && type -p curl >/dev/null || (apt update && apt install curl -y) \
   && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
