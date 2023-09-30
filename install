@@ -46,9 +46,10 @@ if [ -f /.dockerenv ]; then
   sudo apt-get -y install --no-install-recommends \
     ripgrep \
     fish
+  mkdir -p "$HOME"/.config/fish
   # http.nvim requires rust
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  echo 'set -x PATH $HOME/.cargo/bin $PATH' >> $HOME/.config/fish/config.fish
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+  echo 'set -x PATH $HOME/.cargo/bin $PATH' >>"$HOME"/.config/fish/config.fish
 
   # gh
   type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y --no-install-recommends)
@@ -70,12 +71,10 @@ if [ -f /.dockerenv ]; then
   echo '{ "path": "cz-conventional-changelog" }' >~/.czrc
 
   # Neovim
-  mkdir -p /tmp/
-  cd /tmp
-  git clone https://github.com/neovim/neovim
-  cd /tmp/neovim
-  git checkout ${NEOVIM_VERSION}
-  make -j4 && sudo make install
+  sudo apt install -y software-properties-common
+  sudo add-apt-repository -y ppa:neovim-ppa/stable
+  sudo apt update
+  sudo apt install -y neovim
 
   # delta
   mkdir -p /tmp/delta
