@@ -62,28 +62,71 @@ function config.vim_illuminate()
 end
 
 function config.indent_blankline()
-  -- vim.opt.list = true  -- already set in core module
-  -- vim.opt.listchars:append "eol:↴"
+  local highlight = {
+    'RainbowRed',
+    'RainbowYellow',
+    'RainbowBlue',
+    'RainbowOrange',
+    'RainbowGreen',
+    'RainbowViolet',
+    'RainbowCyan',
+  }
+  local hooks = require('ibl.hooks')
+  -- create the highlight groups in the highlight setup hook, so they are reset
+  -- every time the colorscheme changes
+  hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    -- Default of indent-blankline
+    -- vim.api.nvim_set_hl(0, 'RainbowRed', { fg = '#E06C75' })
+    -- vim.api.nvim_set_hl(0, 'RainbowYellow', { fg = '#E5C07B' })
+    -- vim.api.nvim_set_hl(0, 'RainbowBlue', { fg = '#61AFEF' })
+    -- vim.api.nvim_set_hl(0, 'RainbowOrange', { fg = '#D19A66' })
+    -- vim.api.nvim_set_hl(0, 'RainbowGreen', { fg = '#98C379' })
+    -- vim.api.nvim_set_hl(0, 'RainbowViolet', { fg = '#C678DD' })
+    -- vim.api.nvim_set_hl(0, 'RainbowCyan', { fg = '#56B6C2' })
+    -- Custom color based on kanagawa.nvim
+    vim.api.nvim_set_hl(0, 'RainbowRed', { fg = '#E46876' })
+    vim.api.nvim_set_hl(0, 'RainbowYellow', { fg = '#E6C384' })
+    vim.api.nvim_set_hl(0, 'RainbowBlue', { fg = '#7E9CD8' })
+    vim.api.nvim_set_hl(0, 'RainbowOrange', { fg = '#FFA066' })
+    vim.api.nvim_set_hl(0, 'RainbowGreen', { fg = '#98BB6C' })
+    vim.api.nvim_set_hl(0, 'RainbowViolet', { fg = '#957FB8' })
+    vim.api.nvim_set_hl(0, 'RainbowCyan', { fg = '#658594' })
+  end)
 
-  require('indent_blankline').setup({
-    show_end_of_line = true,
-    filetype_exclude = {
-      'dashboad',
-      'fugitive',
-      'gitcommit',
-      'markdown',
-      'json',
-      'txt',
-      'help',
-      'NvimTree',
-      'git',
-      'TelescopePrompt',
-      '', -- for all buffers without a file type
+  require('ibl').setup({
+    enabled = true,
+    indent = {
+      char = '╎',
     },
-    buftype_exclude = { 'terminal', 'nofile' },
-    show_trailing_blankline_indent = false,
-    show_current_context = true,
+    scope = {
+      enabled = true,
+      show_start = true,
+      show_end = true,
+      highlight = highlight,
+    },
+    exclude = {
+      filetypes = {
+        'lspinfo',
+        'checkhealth',
+        'man',
+        'dashboad',
+        'fugitive',
+        'gitcommit',
+        'markdown',
+        'json',
+        'txt',
+        'help',
+        'NvimTree',
+        'git',
+        'TelescopePrompt',
+        'TelescopeResults',
+        '', -- for all buffers without a file type
+      },
+      buftypes = { 'terminal', 'nofile', 'prompt', 'quickfix' },
+    },
   })
+
+  hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 end
 
 function config.dashboard()

@@ -39,6 +39,7 @@ package({
 package({
   'lukas-reineke/indent-blankline.nvim',
   -- event = { "FocusLost", "CursorHold" },
+  main = 'ibl',
   event = 'BufReadPost',
   config = conf.indent_blankline,
 })
