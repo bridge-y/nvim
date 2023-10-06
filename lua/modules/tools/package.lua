@@ -108,3 +108,8 @@ package({
   end,
 })
 
+package({
+  'subnut/nvim-ghost.nvim',
+  cmd = 'GhostTextStart',
+})
+
