@@ -52,6 +52,7 @@ function config.telescope()
   require('telescope').load_extension('undo')
   require('telescope').load_extension('noice')
   require('telescope').load_extension('media_files')
+  require('telescope').load_extension('egrepify')
 end
 
 function config.project()

@@ -12,6 +12,7 @@ package({
     { 'ahmedkhalf/project.nvim', event = 'BufReadPost', config = conf.project },
     { 'debugloop/telescope-undo.nvim' },
     { 'nvim-telescope/telescope-media-files.nvim' },
+    { 'fdschmidt93/telescope-egrepify.nvim' },
   },
 })
 

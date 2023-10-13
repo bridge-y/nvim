@@ -75,6 +75,7 @@ nmap({
   -- Telescope
   { '<Leader>b', cmd('Telescope buffers'), opts(noremap, silent, 'Telescope: Buffers') },
   { '<Leader>fa', cmd('Telescope live_grep'), opts(noremap, silent, 'Telescope: Live grep') },
+  { '<Leader>fA', cmd('Telescope egrepify'), opts(noremap, silent, 'Telescope: Live grep by telescope-egrepify.nvim') },
   { '<Leader>ff', cmd('Telescope find_files'), opts(noremap, silent, 'Telescope: Find files under current directory') },
   {
     '<Leader>fb',
