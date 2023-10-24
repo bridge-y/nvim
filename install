@@ -47,7 +47,7 @@ if [ -f /.dockerenv ]; then
     fish
   mkdir -p "$HOME"/.config/fish
   # http.nvim requires rust
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+  type -p rustup >/dev/null || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable)
   echo 'set -x PATH $HOME/.cargo/bin $PATH' >>"$HOME"/.config/fish/config.fish
 
   # gh
