@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -e
 
-NEOVIM_VERSION=nightly
 LAZYGIT_VERSION=0.38.2
 DELTA_VERSION=0.15.1
 
@@ -48,8 +47,10 @@ if [ -f /.dockerenv ]; then
     fish
   mkdir -p "$HOME"/.config/fish
   # http.nvim requires rust
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
-  echo 'set -x PATH $HOME/.cargo/bin $PATH' >>"$HOME"/.config/fish/config.fish
+  export CARGO_HOME=${CARGO_HOME:-"/usr/local/cargo"}
+  export RUSTUP_HOME=${RUSTUP_HOME:-"/usr/local/rustup"}
+  type -p rustup >/dev/null || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable)
+  echo 'set -x PATH $CARGO_HOME/bin $PATH' >>"$HOME"/.config/fish/config.fish
 
   # gh
   type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y --no-install-recommends)
