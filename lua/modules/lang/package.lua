@@ -21,3 +21,11 @@ package({
   config = conf.headlines,
 })
 
+package({
+  'topazape/md-preview.nvim',
+  ft = { 'md', 'markdown', 'mkd', 'mkdn', 'mdwn', 'mdown', 'mdtxt', 'mdtext', 'rmd', 'wiki', 'zettelkasten' },
+  config = function()
+    require('md-preview').setup({})
+  end,
+})
+
