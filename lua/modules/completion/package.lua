@@ -92,7 +92,7 @@ package({
 })
 
 package({
-  'jose-elias-alvarez/null-ls.nvim',
+  'nvimtools/none-ls.nvim',
   event = { 'CursorHold', 'CursorHoldI' },
   dependencies = { 'jay-babu/mason-null-ls.nvim' },
   config = conf.null_ls,
