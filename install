@@ -3,6 +3,7 @@ set -e
 
 LAZYGIT_VERSION=0.38.2
 DELTA_VERSION=0.15.1
+NODE_VERSION=21
 
 CURRENT_DIR=$(
   cd "$(dirname "$0")"
@@ -20,32 +21,28 @@ if [ -f /.dockerenv ]; then
   sudo apt-get update
   export DEBIAN_FRONTEND=noninteractive
 
-  # For building neovim
-  sudo apt-get -y install --no-install-recommends \
-    ninja-build \
-    gettext \
-    libtool \
-    libtool-bin \
-    autoconf \
-    automake \
-    cmake \
-    g++ \
-    pkg-config \
-    unzip \
-    curl \
-    doxygen \
-    lua5.3
+  sudo apt-get -y install curl
+
+  # nodejs
+  mkdir -p /tmp/nodejs
+  cd /tmp/nodejs
+  sudo apt autoremove -y nodejs
+  curl -SLO https://deb.nodesource.com/nsolid_setup_deb.sh
+  chmod 500 nsolid_setup_deb.sh
+  sudo ./nsolid_setup_deb.sh $NODE_VERSION
+  sudo apt-get install nodejs -y
+
   # mason.nvim may require
   sudo apt-get -y install --no-install-recommends \
-    nodejs \
-    npm \
     python3 \
     python3-pip
+
   # utility
   sudo apt-get -y install --no-install-recommends \
     ripgrep \
     fish
   mkdir -p "$HOME"/.config/fish
+
   # http.nvim requires rust
   type -p rustup >/dev/null || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable)
   echo 'set -x PATH $HOME/.cargo/bin $PATH' >>"$HOME"/.config/fish/config.fish
