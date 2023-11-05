@@ -76,3 +76,9 @@ package({
 package({
   'LunarVim/bigfile.nvim',
 })
+
+package({
+  'vidocqh/auto-indent.nvim',
+  ops = {},
+})
+
