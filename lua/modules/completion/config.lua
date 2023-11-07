@@ -526,6 +526,10 @@ function config.nvim_lspconfig()
       'dockerls',
       'docker_compose_language_service',
       'marksman',
+      'tsserver',
+      'eslint',
+      'html',
+      'tailwindcss',
       -- "diagnosticls",
     },
     handlers = {
