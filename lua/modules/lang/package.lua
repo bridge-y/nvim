@@ -16,6 +16,12 @@ package({
 })
 
 package({
+  'mrcjkb/rustaceanvim',
+  version = '^3', -- Recommended
+  ft = { 'rust' },
+})
+
+package({
   'lukas-reineke/headlines.nvim',
   ft = { 'markdown', 'telekasten', 'yaml' },
   config = conf.headlines,
