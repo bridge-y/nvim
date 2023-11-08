@@ -456,6 +456,7 @@ function config.nvim_cmp()
       { name = 'luasnip' },
       { name = 'codeium' },
       { name = 'git' },
+      { name = 'crates' },
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },

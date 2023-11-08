@@ -17,6 +17,11 @@ function config.crates()
   -- code action
   local null_ls = require('null-ls')
   require('crates').setup({
+    src = {
+      cmp = {
+        enabled = true,
+      },
+    },
     null_ls = {
       enabled = true,
       name = 'crates.nvim',
@@ -32,7 +37,6 @@ function config.crates()
   nmap({
     { '<leader>Ct', crates.toggle, opts(silent, 'Crates: Enable or disable UI elements') },
     { '<leader>Cr', crates.reload, opts(silent, 'Crates: Reload data') },
-
     { '<leader>CK', show_documentation, opts(silent, 'Crates: Show/hide popup with crate details') },
     {
       '<leader>Cv',
