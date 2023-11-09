@@ -79,6 +79,7 @@ package({
 
 package({
   'vidocqh/auto-indent.nvim',
+  event = { 'InsertEnter' },
   ops = {},
 })
 
