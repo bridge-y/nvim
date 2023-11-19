@@ -72,7 +72,7 @@ package({
   config = conf.noice,
   dependencies = {
     'MunifTanjim/nui.nvim',
-    'rcarriga/nvim-notify',
+    -- 'rcarriga/nvim-notify',  -- if disabled, always use mini view
   },
 })
 
