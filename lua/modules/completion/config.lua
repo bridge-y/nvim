@@ -530,6 +530,7 @@ function config.nvim_lspconfig()
       'eslint',
       'html',
       'tailwindcss',
+      'gopls',
       -- "diagnosticls",
     },
     handlers = {
