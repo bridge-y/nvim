@@ -527,7 +527,7 @@ function config.nvim_lspconfig()
       'docker_compose_language_service',
       'marksman',
       'tsserver',
-      'eslint',
+      'biome',
       'html',
       'tailwindcss',
       'gopls',
