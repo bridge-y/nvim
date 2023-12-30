@@ -129,6 +129,22 @@ function config.indent_blankline()
   hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 end
 
+function config.hlchunk()
+  require('hlchunk').setup({
+    -- chunk = {
+    --   chars = {
+    --     right_arrow = '→',
+    --   },
+    -- },
+    indent = {
+      chars = { '│', '¦', '┆', '┊' }, -- more code can be found in https://unicodeplus.com/
+    },
+    blank = {
+      enable = false,
+    },
+  })
+end
+
 function config.dashboard()
   local db = require('dashboard')
   db.setup({

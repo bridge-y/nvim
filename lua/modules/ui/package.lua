@@ -36,12 +36,18 @@ package({
   config = conf.vim_illminate,
 })
 
+-- package({
+--   'lukas-reineke/indent-blankline.nvim',
+--   -- event = { "FocusLost", "CursorHold" },
+--   main = 'ibl',
+--   event = 'BufReadPost',
+--   config = conf.indent_blankline,
+-- })
+
 package({
-  'lukas-reineke/indent-blankline.nvim',
-  -- event = { "FocusLost", "CursorHold" },
-  main = 'ibl',
-  event = 'BufReadPost',
-  config = conf.indent_blankline,
+  'shellRaining/hlchunk.nvim',
+  event = { 'UIEnter' },
+  config = conf.hlchunk,
 })
 
 package({ 'glepnir/dashboard-nvim', event = 'BufWinEnter', config = conf.dashboard })
