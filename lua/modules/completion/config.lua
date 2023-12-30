@@ -567,6 +567,7 @@ function config.null_ls()
   local null_ls = require('null-ls')
 
   null_ls.setup({
+    diagnostics_format = '#{m} (#{s}: #{c})',
     root_dir = require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git', 'pyproject.toml'),
     sources = {
       --- Replace these with the tools you have installed
@@ -576,8 +577,10 @@ function config.null_ls()
           return utils.root_has_file({ 'pyproject.toml' })
         end,
       }),
-      null_ls.builtins.diagnostics.pyproject_flake8,
-      null_ls.builtins.formatting.isort,
+      null_ls.builtins.diagnostics.ruff,
+      -- null_ls.builtins.diagnostics.pyproject_flake8,
+      -- null_ls.builtins.formatting.isort,
+      null_ls.builtins.formatting.rustywind,
       null_ls.builtins.formatting.stylua,
       null_ls.builtins.formatting.fish_indent,
       null_ls.builtins.formatting.shfmt.with({
@@ -585,7 +588,17 @@ function config.null_ls()
       }),
       -- null_ls.builtins.formatting.prettier,
       -- null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
-      null_ls.builtins.formatting.prettier.with({ extra_filetypes = { 'telekasten', 'octo' } }),
+      -- null_ls.builtins.formatting.prettier.with({ extra_filetypes = { 'telekasten', 'octo' } }),
+      null_ls.builtins.formatting.biome.with({
+        args = {
+          'check',
+          '--apply-unsafe',
+          '--formatter-enabled=true',
+          '--organize-imports-enabled=true',
+          '--skip-errors',
+          '$FILENAME',
+        },
+      }),
       null_ls.builtins.formatting.textlint.with({ extra_filetypes = { 'telekasten', 'octo' } }),
       null_ls.builtins.diagnostics.textlint.with({ extra_filetypes = { 'telekasten' } }),
       null_ls.builtins.code_actions.shellcheck,
