@@ -163,3 +163,9 @@ nmap({
   },
   { '<leader>sc', cmd('Octo issue create bridge-y/scraps'), opts(noremap, 'Octo: create a scrap') },
 })
+
+nmap({
+  '<leader>t',
+  cmd('ToggleTerm'),
+  opts(noremap, silent, 'ToggleTerm: Launch terminal on horizonal window'),
+})
