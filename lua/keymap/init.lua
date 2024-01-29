@@ -21,7 +21,7 @@ function _lazygit_toggle()
 end
 
 local keymap = require('core.keymap')
-local nmap, imap, cmap, xmap, vmap = keymap.nmap, keymap.imap, keymap.cmap, keymap.xmap, keymap.vmap
+local nmap, imap, cmap, xmap, vmap, tmap = keymap.nmap, keymap.imap, keymap.cmap, keymap.xmap, keymap.vmap, keymap.tmap
 local silent, noremap, expr = keymap.silent, keymap.noremap, keymap.expr
 local opts = keymap.new_opts
 local cmd = keymap.cmd
@@ -166,6 +166,13 @@ nmap({
 
 nmap({
   '<leader>t',
-  cmd('ToggleTerm'),
+  cmd('TabToggleTerm!'),
   opts(noremap, silent, 'ToggleTerm: Launch terminal on horizonal window'),
 })
+
+tmap({
+  '<ESC><ESC>',
+  '<C-\\><C-n>',
+  opts(noremap, 'Escape terminal mode'),
+})
+

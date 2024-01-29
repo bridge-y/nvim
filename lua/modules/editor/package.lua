@@ -49,6 +49,16 @@ package({
 })
 
 package({
+  'watanany/tabtoggleterm.nvim',
+  event = 'UIEnter',
+  config = function()
+    require('tabtoggleterm').setup({
+      size = 20,
+    })
+  end,
+})
+
+package({
   'NvChad/nvim-colorizer.lua',
   event = 'UIEnter',
   config = function()
