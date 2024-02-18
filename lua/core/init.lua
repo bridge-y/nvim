@@ -49,3 +49,6 @@ g.loaded_netrwFileHandlers = 1
 require('core.pack'):boot_strap()
 require('core.options')
 require('keymap')
+vim.api.nvim_create_user_command('AllUpdate', function()
+  require('core.manage').update_all()
+end, { desc = 'Update plugins, mason packages, treesitter parsers' })
