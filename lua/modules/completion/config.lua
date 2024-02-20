@@ -505,6 +505,18 @@ function config.nvim_lspconfig()
     require('lsp_signature').on_attach(lsp_signature_config, bufnr)
   end)
 
+  -- for nvim-ufo
+  lsp_zero.set_server_config({
+    capabilities = {
+      textDocument = {
+        foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true,
+        },
+      },
+    },
+  })
+
   -- diagnostic text setting
   vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
 

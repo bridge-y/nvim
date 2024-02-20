@@ -65,7 +65,10 @@ opt.whichwrap = 'h,l,<,>,[,],~'
 opt.breakindentopt = 'shift:2,min:20'
 opt.showbreak = '↳ '
 
+opt.foldcolumn = '1'
+opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
+opt.foldenable = true
 opt.foldmethod = 'marker'
 
 opt.number = true

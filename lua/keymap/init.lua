@@ -176,3 +176,11 @@ tmap({
   opts(noremap, 'Escape terminal mode'),
 })
 
+-- nvim-ufo
+nmap({
+  { 'zR', require('ufo').openAllFolds, opts(noremap, 'nvim-ufo: open all folds') },
+  { 'zM', require('ufo').closeAllFolds, opts(noremap, 'nvim-ufo: close all folds') },
+  { 'zr', require('ufo').openFoldsExceptKinds, opts(noremap, 'nvim-ufo: fold less') },
+  { 'zm', require('ufo').closeFoldsWith, opts(noremap, 'nvim-ufo: fold more') },
+})
+
