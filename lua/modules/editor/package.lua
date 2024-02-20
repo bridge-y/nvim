@@ -93,3 +93,12 @@ package({
   ops = {},
 })
 
+package({
+  'HakonHarnes/img-clip.nvim',
+  event = 'BufEnter',
+  opts = conf.img_clip,
+  keys = {
+    { '<leader>v', '<cmd>PasteImage<cr>', desc = 'img-clip: Paste clipboard image' },
+  },
+})
+

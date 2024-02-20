@@ -123,4 +123,12 @@ function config.toggleterm()
   })
 end
 
+function config.img_clip()
+  return {
+    default = {
+      file_name = '%Y-%m-%d_%H-%M-%S',
+    },
+  }
+end
+
 return config
