@@ -573,6 +573,12 @@ function config.nvim_lspconfig()
         require('lspconfig').pyright.setup(conf.pyright())
       end,
       rust_analyzer = lsp_zero.noop, -- for rustaceanvim
+      tsserver = function()
+        require('lspconfig').tsserver.setup(conf.tsserver())
+      end,
+      gopls = function()
+        require('lspconfig').gopls.setup(conf.gopls())
+      end,
       -- diagnosticls = function()
       --   lsp.configure('diagnosticls', conf.dls())
       -- end,
@@ -585,7 +591,18 @@ function config.nvim_lspconfig()
       timeout_ms = 10000,
     },
     servers = {
-      ['null-ls'] = { 'python', 'markdown', 'telekasten', 'lua', 'octo' },
+      ['null-ls'] = {
+        'python',
+        'markdown',
+        'telekasten',
+        'lua',
+        'octo',
+        'sh',
+        'javascript',
+        'javascriptreact',
+        'typescript',
+        'typescriptreact',
+      },
       ['rust_analyzer'] = { 'rust' },
     },
   })
