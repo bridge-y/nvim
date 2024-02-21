@@ -17,7 +17,7 @@ package({
 
 package({
   'mrcjkb/rustaceanvim',
-  version = '^3', -- Recommended
+  version = '^4', -- Recommended
   ft = { 'rust' },
 })
 

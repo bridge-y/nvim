@@ -505,6 +505,13 @@ function config.nvim_lspconfig()
     require('lsp_signature').on_attach(lsp_signature_config, bufnr)
   end)
 
+  -- for rustaceanvim
+  vim.g.rustaceanvim = {
+    server = {
+      capabilities = lsp_zero.get_capabilities(),
+    },
+  }
+
   -- for nvim-ufo
   lsp_zero.set_server_config({
     capabilities = {
