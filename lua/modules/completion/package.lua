@@ -15,7 +15,8 @@ package({
 
 package({
   'williamboman/mason.nvim',
-  lazy = false,
+  cmd = 'Mason',
+  build = ':MasonUpdate',
   config = true,
 })
 
@@ -55,6 +56,7 @@ package({
   dependencies = {
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'williamboman/mason-lspconfig.nvim' },
+    'mason.nvim',
 
     -- Utility
 
