@@ -528,6 +528,7 @@ function config.nvim_lspconfig()
   })
 
   local conf = require('modules.completion.lspconfig')
+  local ih = require('lsp-inlayhints')
 
   require('mason-lspconfig').setup({
     ensure_installed = {
@@ -548,15 +549,23 @@ function config.nvim_lspconfig()
     handlers = {
       lsp_zero.default_setup,
       lua_ls = function()
-        local lua_opts = lsp_zero.nvim_lua_ls()
-        require('lspconfig').lua_ls.setup(lua_opts)
+        require('lspconfig').lua_ls.setup({
+          on_attach = function(client, bufnr)
+            ih.on_attach(client, bufnr)
+          end,
+          settings = {
+            Lua = {
+              hint = {
+                enable = true,
+              },
+            },
+          },
+        })
       end,
       pyright = function()
         require('lspconfig').pyright.setup(conf.pyright())
       end,
-      rust_analyzer = function()
-        require('lspconfig').rust_analyzer.setup(conf.rust_analyzer())
-      end,
+      rust_analyzer = lsp_zero.noop, -- for rustaceanvim
       -- diagnosticls = function()
       --   lsp.configure('diagnosticls', conf.dls())
       -- end,
