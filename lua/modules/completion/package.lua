@@ -32,6 +32,7 @@ package({
     { 'petertriho/cmp-git' }, -- Optional
     { 'onsails/lspkind.nvim' },
     { 'ray-x/lsp_signature.nvim' },
+    { 'ray-x/cmp-treesitter' },
     -- Snippets
     { 'L3MON4D3/LuaSnip' }, -- Required
     { 'rafamadriz/friendly-snippets' }, -- Optional

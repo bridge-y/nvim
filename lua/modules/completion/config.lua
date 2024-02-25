@@ -73,6 +73,7 @@ function config.nvim_cmp()
       { name = 'buffer' },
       { name = 'path' },
       { name = 'luasnip' },
+      { name = 'treesitter' },
       { name = 'codeium' },
       { name = 'git' },
       { name = 'crates' },
