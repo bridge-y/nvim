@@ -162,16 +162,25 @@ function config.nvim_lspconfig()
     ensure_installed = {
       -- nlsp-settings requires jsonls
       'jsonls',
+      -- python
       'pyright',
+      'ruff_lsp',
+      -- rust
       'rust_analyzer',
+      -- docker
       'dockerls',
       'docker_compose_language_service',
+      -- markdown
       'marksman',
+      -- javascript/typescript
       'tsserver',
       'biome',
       'html',
       'tailwindcss',
+      -- golang
       'gopls',
+      -- bash
+      'bashls',
       -- "diagnosticls",
     },
     handlers = {
@@ -246,7 +255,6 @@ function config.null_ls()
           return utils.root_has_file({ 'pyproject.toml' })
         end,
       }),
-      null_ls.builtins.diagnostics.ruff,
       -- null_ls.builtins.diagnostics.pyproject_flake8,
       -- null_ls.builtins.formatting.isort,
       null_ls.builtins.formatting.rustywind,
@@ -270,7 +278,6 @@ function config.null_ls()
       }),
       null_ls.builtins.formatting.textlint.with({ extra_filetypes = { 'telekasten', 'octo' } }),
       null_ls.builtins.diagnostics.textlint.with({ extra_filetypes = { 'telekasten' } }),
-      null_ls.builtins.code_actions.shellcheck,
       null_ls.builtins.code_actions.gitsigns,
     },
   })
