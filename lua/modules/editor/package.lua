@@ -8,6 +8,7 @@ package({
   config = conf.nvim_treesitter,
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    'nvim-treesitter/nvim-treesitter-context',
     'andymass/vim-matchup',
   },
 })
