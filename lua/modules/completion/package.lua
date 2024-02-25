@@ -76,6 +76,7 @@ package({
         vim.cmd('hi! LspInlayHint guifg=#403d52 guibg=#1f1d2e')
       end,
     },
+    { 'folke/neodev.nvim', opts = {} },
   },
   config = conf.nvim_lspconfig,
 })

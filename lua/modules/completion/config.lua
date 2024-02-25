@@ -156,6 +156,7 @@ function config.nvim_lspconfig()
 
   local conf = require('modules.completion.lspconfig')
   local ih = require('lsp-inlayhints')
+  require('neodev').setup({})
 
   require('mason-lspconfig').setup({
     ensure_installed = {
@@ -184,6 +185,9 @@ function config.nvim_lspconfig()
             Lua = {
               hint = {
                 enable = true,
+              },
+              completion = {
+                callSnippet = 'Replace',
               },
             },
           },
