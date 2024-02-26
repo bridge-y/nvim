@@ -486,4 +486,112 @@ function config.diffview()
   require('diffview').setup()
 end
 
+function config.heirline()
+  local function lsp_client(msg)
+    msg = msg or ''
+    local buf_clients = vim.lsp.get_active_clients({ bufnr = 0 })
+
+    if next(buf_clients) == nil then
+      if type(msg) == 'boolean' or #msg == 0 then
+        return ''
+      end
+      return msg
+    end
+
+    local buf_ft = vim.bo.filetype
+    local buf_client_names = {}
+
+    -- add client
+    for _, client in pairs(buf_clients) do
+      if client.name ~= 'null-ls' then
+        table.insert(buf_client_names, client.name)
+      end
+    end
+
+    -- add formatter
+    local lsp_utils = require('modules.completion.utils')
+    local formatters = lsp_utils.list_formatters(buf_ft)
+    vim.list_extend(buf_client_names, formatters)
+
+    -- add linter
+    local linters = lsp_utils.list_linters(buf_ft)
+    vim.list_extend(buf_client_names, linters)
+
+    -- add hover
+    local hovers = lsp_utils.list_hovers(buf_ft)
+    vim.list_extend(buf_client_names, hovers)
+
+    -- add code action
+    local code_actions = lsp_utils.list_code_actions(buf_ft)
+    vim.list_extend(buf_client_names, code_actions)
+
+    local hash = {}
+    local client_names = {}
+    for _, v in ipairs(buf_client_names) do
+      if not hash[v] then
+        client_names[#client_names + 1] = v
+        hash[v] = true
+      end
+    end
+    table.sort(client_names)
+    return '' .. ' [' .. table.concat(client_names, ' ') .. ']'
+  end
+
+  local kanagawa = require('kanagawa.colors').setup()
+  local palette = kanagawa.palette
+
+  local lib = require('heirline-components.all')
+  local conditions = require('heirline.conditions')
+  local LSPActive = {
+    condition = conditions.lsp_attached,
+    update = { 'LspAttach', 'LspDetach' },
+    provider = lsp_client,
+    on_click = {
+      callback = function()
+        vim.defer_fn(function()
+          vim.cmd('LspInfo')
+        end, 100)
+      end,
+      name = 'heirline_LSP',
+    },
+  }
+  local settings = {
+    statuscolumn = {
+      init = function(self)
+        self.bufnr = vim.api.nvim_get_current_buf()
+      end,
+      lib.component.foldcolumn(),
+      lib.component.fill(),
+      lib.component.numbercolumn(),
+      lib.component.signcolumn(),
+    },
+    statusline = {
+      hl = { fg = palette.oldWhite, bg = palette.sumiInk0 },
+      lib.component.mode({ mode_text = { pad_text = 'center' } }),
+      lib.component.git_branch(),
+      lib.component.git_diff(),
+      lib.component.diagnostics(),
+      lib.component.file_info({ file_icon = false, filetype = false, filename = {}, file_modifiled = false }),
+      lib.component.fill(),
+      lib.component.cmd_info(),
+      lib.component.fill(),
+      -- lib.component.lsp(),
+      LSPActive,
+      lib.component.file_info({ filetype = false, surround = { separator = 'right' } }),
+      lib.component.file_encoding({
+        file_format = { padding = { left = 1, right = 0 } },
+        file_encoding = { padding = { left = 1, right = 0 } },
+      }),
+      lib.component.virtual_env(),
+      lib.component.nav({ ruler = false, percentage = { padding = { left = 0 } }, scrollbar = false }),
+      lib.component.mode({ surround = { separator = 'right' } }),
+    },
+  }
+
+  local heirline = require('heirline')
+  lib.init.subscribe_to_events()
+  heirline.load_colors(lib.hl.get_colors())
+  heirline.setup(settings)
+end
+
 return config
