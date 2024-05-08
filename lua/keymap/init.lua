@@ -1,25 +1,3 @@
-local _lazygit = nil
-function _lazygit_toggle()
-  if vim.fn.executable('lazygit') then
-    if not _lazygit then
-      local ok, _ = pcall(require, 'toggleterm.terminal')
-      if ok then
-        _lazygit = require('toggleterm.terminal').Terminal:new({
-          cmd = 'lazygit',
-          direction = 'float',
-          close_on_exit = true,
-          hidden = true,
-        })
-      else
-        vim.notify('Plugin [toggleterm] is not found.', vim.log.levels.ERROR, { title = 'toggleterm' })
-      end
-    end
-    _lazygit:toggle()
-  else
-    vim.notify('Command [lazygit] is not found.', vim.log.levels.ERROR, { title = 'toggleterm' })
-  end
-end
-
 local keymap = require('core.keymap')
 local nmap, imap, cmap, xmap, vmap, tmap = keymap.nmap, keymap.imap, keymap.cmap, keymap.xmap, keymap.vmap, keymap.tmap
 local silent, noremap, expr = keymap.silent, keymap.noremap, keymap.expr
@@ -94,7 +72,7 @@ nmap({
   { '<C-p>', cmd('Telescope keymaps') },
 
   -- lazygit
-  { '<Leader>lg', cmd('lua _lazygit_toggle( )'), opts(noremap, silent, 'Git: Toggle lazygit') },
+  { '<Leader>lg', cmd('LazyGit'), opts(noremap, silent, 'Git: Toggle lazygit') },
 
   -- legendary
   -- {'<C-p>', cmd('Legendary')}
