@@ -2,12 +2,28 @@ local package = require('core.pack').package
 local conf = require('modules.ui.config')
 
 -- package({ 'glepnir/zephyr-nvim', config = conf.zephyr })
+
 package({
-  'rebelot/kanagawa.nvim',
-  name = 'kanagawa',
-  event = 'VimEnter',
-  config = conf.kanagawa,
+  'rachartier/tiny-devicons-auto-colors.nvim',
+  dependencies = {
+    'nvim-tree/nvim-web-devicons',
+    {
+      'rebelot/kanagawa.nvim',
+      name = 'kanagawa',
+      event = 'VimEnter',
+      config = conf.kanagawa,
+    },
+  },
+  event = 'VeryLazy',
+  config = function()
+    local colors = require('kanagawa.colors').setup()
+    local pallets = colors.palette
+    require('tiny-devicons-auto-colors').setup({
+      colors = pallets,
+    })
+  end,
 })
+
 -- package({
 --   'shaunsingh/nord.nvim',
 --   event = "VimEnter",
