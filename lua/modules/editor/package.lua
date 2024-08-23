@@ -104,7 +104,7 @@ package({
 
 package({
   'kevinhwang91/nvim-ufo',
-  lazy = true,
+  event = 'BufRead',
   keys = {
     {
       'zR',
@@ -137,6 +137,25 @@ package({
   },
   dependencies = {
     'kevinhwang91/promise-async',
+    -- if not use herline.nvim, enable statuscol.nvim
+    {
+      'luukvbaal/statuscol.nvim',
+      config = function()
+        local builtin = require('statuscol.builtin')
+        require('statuscol').setup({
+          relculright = true,
+          segments = {
+            { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+            {
+              sign = { name = { 'Diagnostic' }, maxwidth = 2, auto = true },
+              click = 'v:lua.ScSa',
+            },
+            { text = { builtin.lnumfunc, ' ' }, click = 'v:lua.ScLa' },
+            { text = { '%s' }, click = 'v:lua.ScSa' },
+          },
+        })
+      end,
+    },
   },
   config = conf.nvim_ufo,
 })

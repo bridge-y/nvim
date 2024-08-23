@@ -98,6 +98,11 @@ package({
   },
 })
 
+package({
+  'nvim-lualine/lualine.nvim',
+  event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+  config = conf.lualine,
+})
 
 package({
   'lewis6991/gitsigns.nvim',
@@ -111,9 +116,9 @@ package({
   config = conf.diffview,
 })
 
-package({
-  'rebelot/heirline.nvim',
-  event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
-  dependencies = { 'zeioth/heirline-components.nvim', 'kanagawa' },
-  config = conf.heirline,
-})
+-- package({
+--   'rebelot/heirline.nvim',
+--   event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+--   dependencies = { 'zeioth/heirline-components.nvim', 'kanagawa' },
+--   config = conf.heirline,
+-- })
