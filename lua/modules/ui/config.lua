@@ -109,7 +109,7 @@ function config.indent_blankline()
         'lspinfo',
         'checkhealth',
         'man',
-        'dashboad',
+        'dashboard',
         'fugitive',
         'gitcommit',
         'markdown',
@@ -166,6 +166,12 @@ function config.dashboard()
           group = 'DiagnosticHint',
           action = 'Telescope projects',
           key = 'p',
+        },
+        {
+          desc = ' New File',
+          group = 'Label',
+          action = 'vim.api.nvim_command("enew")',
+          key = 'n',
         },
         {
           desc = ' File Browser',
