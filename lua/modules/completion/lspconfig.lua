@@ -190,4 +190,17 @@ function config.dls()
   return settings
 end
 
+function config.ruff_lsp()
+  local settings = {
+    init_options = {
+      settings = {
+        -- Any extra CLI arguments for `ruff` go here.
+        args = {},
+      },
+    },
+  }
+
+  return settings
+end
+
 return config

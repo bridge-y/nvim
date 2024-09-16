@@ -215,6 +215,7 @@ function config.nvim_lspconfig()
       -- diagnosticls = function()
       --   lsp.configure('diagnosticls', conf.dls())
       -- end,
+      ruff_lsp = require('lspconfig').ruff_lsp.setup(conf.ruff_lsp()),
     },
   })
 
