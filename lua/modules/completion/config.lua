@@ -221,7 +221,6 @@ function config.nvim_lspconfig()
     },
     servers = {
       ['null-ls'] = {
-        'python',
         'markdown',
         'telekasten',
         'lua',
@@ -233,6 +232,7 @@ function config.nvim_lspconfig()
         'typescriptreact',
       },
       ['rust_analyzer'] = { 'rust' },
+      ['ruff-lsp'] = { 'python' },
     },
   })
 end
