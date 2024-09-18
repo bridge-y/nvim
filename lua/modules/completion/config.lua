@@ -439,4 +439,55 @@ function config.auto_pairs()
   cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
 end
 
+function config.conform()
+  local settings = {
+    formatters_by_ft = {
+      fish = { 'fish_indent' },
+      javascript = { 'biome', 'rustywind' },
+      javascriptreact = { 'biome', 'rustywind' },
+      json = { 'biome' },
+      jsonc = { 'biome' },
+      lua = { 'stylua' },
+      markdown = { 'textlint', 'textlint_check' },
+      python = { 'ruff' },
+      sh = { 'shfmt' },
+      text = { 'textlint', 'textlint_check' },
+      typescript = { 'biome', 'rustywind' },
+      typescriptreact = { 'biome', 'rustywind' },
+    },
+    -- Set up format-on-save
+    format_on_save = { timeout_ms = 500, lsp_fallback = true },
+    -- Customize formatters
+    formatters = {
+      biome = {
+        args = {
+          'check',
+          '--apply-unsafe',
+          '--formatter-enabled=true',
+          '--organize-imports-enabled=true',
+          '--skip-errors',
+          '$FILENAME',
+        },
+      },
+      black = {
+        prepend_args = { '--config', 'pyproject.toml' },
+      },
+      shfmt = {
+        prepend_args = { '-i', '2' },
+      },
+      -- if add following settings, will occur error
+      -- textlint = {
+      --   command = { 'textlint' },
+      --   args = { '--fix', '$FILENAME' },
+      -- },
+      -- textlint_check = {
+      --   command = { 'textlint' },
+      --   args = { '-f', 'json', '--stdin', '--stdin-filename', '$FILENAME' },
+      -- },
+    },
+  }
+
+  return settings
+end
+
 return config

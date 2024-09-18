@@ -98,6 +98,29 @@ package({
 })
 
 package({
+  'stevearc/conform.nvim',
+  event = { 'BufWritePre' },
+  cmd = { 'ConformInfo' },
+  keys = {
+    {
+      -- Customize or remove this keymap to your liking
+      'gf',
+      function()
+        require('conform').format({ async = true, lsp_fallback = true })
+      end,
+      mode = '',
+      desc = 'Format buffer',
+    },
+  },
+  -- Everything in opts will be passed to setup()
+  opts = conf.conform,
+  init = function()
+    -- If you want the formatexpr, here is the place to set it
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  end,
+})
+
+package({
   'hrsh7th/nvim-insx',
   event = 'InsertEnter',
   config = function()
