@@ -3,14 +3,9 @@ local conf = require('modules.completion.config')
 
 package({
   'VonHeikemen/lsp-zero.nvim',
-  branch = 'v3.x',
+  branch = 'v4.x',
   lazy = true,
   config = false,
-  init = function()
-    -- Disable automatic setup, we are doing it manually
-    vim.g.lsp_zero_extend_cmp = 0
-    vim.g.lsp_zero_extend_lspconfig = 0
-  end,
 })
 
 package({
@@ -100,6 +95,29 @@ package({
   event = { 'CursorHold', 'CursorHoldI' },
   dependencies = { 'jay-babu/mason-null-ls.nvim' },
   config = conf.null_ls,
+})
+
+package({
+  'stevearc/conform.nvim',
+  event = { 'BufWritePre' },
+  cmd = { 'ConformInfo' },
+  keys = {
+    {
+      -- Customize or remove this keymap to your liking
+      'gf',
+      function()
+        require('conform').format({ async = true, lsp_fallback = true })
+      end,
+      mode = '',
+      desc = 'Format buffer',
+    },
+  },
+  -- Everything in opts will be passed to setup()
+  opts = conf.conform,
+  init = function()
+    -- If you want the formatexpr, here is the place to set it
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  end,
 })
 
 package({

@@ -23,15 +23,13 @@ end
 function config.nvim_cmp()
   local lsp_zero = require('lsp-zero')
   local cmp_action = lsp_zero.cmp_action()
-  lsp_zero.extend_cmp()
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
 
   require('luasnip.loaders.from_vscode').lazy_load()
 
-  local cmp_config = lsp_zero.defaults.cmp_config({
-    -- preselect = cmp.PreselectMode.Item,
+  cmp.setup({
     completion = {
       completeopt = 'menu,menuone,noinsert',
     },
@@ -39,9 +37,17 @@ function config.nvim_cmp()
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
-    -- Note: if not intended mapping, complete following instruction
-    -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md
-    mapping = {
+    sources = {
+      { name = 'nvim_lsp' },
+      { name = 'buffer' },
+      { name = 'path' },
+      { name = 'luasnip' },
+      { name = 'treesitter' },
+      { name = 'codeium' },
+      { name = 'git' },
+      { name = 'crates' },
+    },
+    mapping = cmp.mapping.preset.insert({
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
       ['<C-c>'] = cmp.mapping.abort(),
 
@@ -54,8 +60,8 @@ function config.nvim_cmp()
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
 
       ['<Tab>'] = cmp_action.tab_complete(),
-      ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-    },
+      ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    }),
     sorting = {
       comparators = {
         cmp.config.compare.offset,
@@ -67,16 +73,6 @@ function config.nvim_cmp()
         cmp.config.compare.length,
         cmp.config.compare.order,
       },
-    },
-    sources = {
-      { name = 'nvim_lsp' },
-      { name = 'buffer' },
-      { name = 'path' },
-      { name = 'luasnip' },
-      { name = 'treesitter' },
-      { name = 'codeium' },
-      { name = 'git' },
-      { name = 'crates' },
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
@@ -90,13 +86,10 @@ function config.nvim_cmp()
       }),
     },
   })
-
-  cmp.setup(cmp_config)
 end
 
 function config.nvim_lspconfig()
   local lsp_zero = require('lsp-zero')
-  lsp_zero.extend_lspconfig()
 
   -- lsp_signature
   -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
@@ -109,7 +102,7 @@ function config.nvim_lspconfig()
     },
   }
 
-  lsp_zero.on_attach(function(client, bufnr)
+  local lsp_attach = function(client, buffer)
     lsp_zero.default_keymaps({
       buffer = bufnr,
       omit = {
@@ -123,7 +116,7 @@ function config.nvim_lspconfig()
       },
     })
     require('lsp_signature').on_attach(lsp_signature_config, bufnr)
-  end)
+  end
 
   -- for rustaceanvim
   vim.g.rustaceanvim = {
@@ -133,21 +126,23 @@ function config.nvim_lspconfig()
   }
 
   -- for nvim-ufo
-  lsp_zero.set_server_config({
-    capabilities = {
-      textDocument = {
-        foldingRange = {
-          dynamicRegistration = false,
-          lineFoldingOnly = true,
-        },
+  local lsp_capabilities = vim.tbl_deep_extend('force', require('cmp_nvim_lsp').default_capabilities(), {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
       },
     },
+  })
+  lsp_zero.extend_lspconfig({
+    capabilities = lsp_capabilities,
+    lsp_attach = lsp_attach,
   })
 
   -- diagnostic text setting
   vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
 
-  lsp_zero.set_sign_icons({
+  lsp_zero.ui({
+    float_border = 'rounded',
     error = ' ',
     warn = ' ',
     info = ' ',
@@ -226,7 +221,6 @@ function config.nvim_lspconfig()
     },
     servers = {
       ['null-ls'] = {
-        'python',
         'markdown',
         'telekasten',
         'lua',
@@ -238,6 +232,7 @@ function config.nvim_lspconfig()
         'typescriptreact',
       },
       ['rust_analyzer'] = { 'rust' },
+      ['ruff-lsp'] = { 'python' },
     },
   })
 end
@@ -442,6 +437,57 @@ function config.auto_pairs()
   end
   local cmp_autopairs = require('nvim-autopairs.completion.cmp')
   cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
+end
+
+function config.conform()
+  local settings = {
+    formatters_by_ft = {
+      fish = { 'fish_indent' },
+      javascript = { 'biome', 'rustywind' },
+      javascriptreact = { 'biome', 'rustywind' },
+      json = { 'biome' },
+      jsonc = { 'biome' },
+      lua = { 'stylua' },
+      markdown = { 'textlint', 'textlint_check' },
+      python = { 'ruff' },
+      sh = { 'shfmt' },
+      text = { 'textlint', 'textlint_check' },
+      typescript = { 'biome', 'rustywind' },
+      typescriptreact = { 'biome', 'rustywind' },
+    },
+    -- Set up format-on-save
+    format_on_save = { timeout_ms = 500, lsp_fallback = true },
+    -- Customize formatters
+    formatters = {
+      biome = {
+        args = {
+          'check',
+          '--apply-unsafe',
+          '--formatter-enabled=true',
+          '--organize-imports-enabled=true',
+          '--skip-errors',
+          '$FILENAME',
+        },
+      },
+      black = {
+        prepend_args = { '--config', 'pyproject.toml' },
+      },
+      shfmt = {
+        prepend_args = { '-i', '2' },
+      },
+      -- if add following settings, will occur error
+      -- textlint = {
+      --   command = { 'textlint' },
+      --   args = { '--fix', '$FILENAME' },
+      -- },
+      -- textlint_check = {
+      --   command = { 'textlint' },
+      --   args = { '-f', 'json', '--stdin', '--stdin-filename', '$FILENAME' },
+      -- },
+    },
+  }
+
+  return settings
 end
 
 return config
