@@ -60,7 +60,7 @@ function config.nvim_cmp()
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
 
       ['<Tab>'] = cmp_action.tab_complete(),
-      -- ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
+      ['<S-Tab>'] = cmp.mapping.select_prev_item(),
     }),
     sorting = {
       comparators = {
