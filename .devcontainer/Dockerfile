@@ -66,6 +66,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && cd /tmp/delta \
   && curl -fsSL https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components 1 \
   && mv /tmp/delta/delta /usr/local/bin/ \
+  # https://github.com/3rd/image.nvim/
+  && curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
   # cleanup
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/*
