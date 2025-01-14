@@ -130,12 +130,13 @@ function config.which_key()
         g = true,
       },
     },
-    window = {
+    win = {
       border = 'none',
-      position = 'bottom',
-      margin = { 1, 0, 1, 0 },
+      title_pos = 'bottom',
       padding = { 1, 1, 1, 1 },
-      winblend = 0,
+      wo = {
+        winblend = 0,
+      },
     },
   })
 end
