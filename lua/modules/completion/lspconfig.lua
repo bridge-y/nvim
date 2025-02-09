@@ -4,6 +4,8 @@ function config.pyright()
   local settings = {
     settings = {
       python = {
+        venvPath = '.',
+        pythonPath = '.venv/bin/python',
         analysis = {
           autoSearchPaths = true,
           diagnosticMode = 'workspace',

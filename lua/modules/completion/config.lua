@@ -159,7 +159,7 @@ function config.nvim_lspconfig()
       'jsonls',
       -- python
       'pyright',
-      'ruff_lsp',
+      'ruff',
       -- rust
       'rust_analyzer',
       -- docker
@@ -210,7 +210,7 @@ function config.nvim_lspconfig()
       -- diagnosticls = function()
       --   lsp.configure('diagnosticls', conf.dls())
       -- end,
-      ruff_lsp = require('lspconfig').ruff_lsp.setup(conf.ruff_lsp()),
+      ruff = require('lspconfig').ruff.setup(conf.ruff_lsp()),
     },
   })
 
@@ -232,7 +232,7 @@ function config.nvim_lspconfig()
         'typescriptreact',
       },
       ['rust_analyzer'] = { 'rust' },
-      ['ruff-lsp'] = { 'python' },
+      ['ruff'] = { 'python' },
     },
   })
 end
