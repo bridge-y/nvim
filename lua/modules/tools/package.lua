@@ -140,3 +140,36 @@ package({
   },
 })
 
+package({
+  'yetone/avante.nvim',
+  event = 'VeryLazy',
+  version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
+  opts = {
+    -- add any opts here
+    provider = 'ollama',
+    vendors = {
+      ollama = {
+        __inherited_from = 'openai',
+        api_key_name = '',
+        disable_tools = true,
+        -- TODO: replace ip address and model name
+        endpoint = 'http://192.0.2.1:11434/v1',
+        model = 'phi4',
+      },
+    },
+  },
+  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  build = 'make',
+  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+  dependencies = {
+    {
+      -- Make sure to set this up properly if you have lazy=true
+      'MeanderingProgrammer/render-markdown.nvim',
+      opts = {
+        file_types = { 'markdown', 'Avante' },
+      },
+      ft = { 'markdown', 'Avante' },
+    },
+  },
+})
+
