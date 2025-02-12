@@ -142,6 +142,17 @@ nmap({
   { '<leader>sc', cmd('Octo issue create bridge-y/scraps'), opts(noremap, 'Octo: create a scrap') },
 })
 
+-- Quick operation for my notes using Octo
+nmap({
+  { '<leader>sm', cmd('Octo issue list bridge-y/my-note'), opts(noremap, 'Octo: show my open notes') },
+  {
+    '<leader>sM',
+    cmd('Octo issue list bridge-y/my-note states=OPEN,CLOSED'),
+    opts(noremap, 'Octo: show my all notes'),
+  },
+})
+
+-- TabToggleTerm
 nmap({
   '<leader>t',
   cmd('TabToggleTerm!'),
