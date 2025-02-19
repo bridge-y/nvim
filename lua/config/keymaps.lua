@@ -1,4 +1,8 @@
-local keymap = require('core.keymap')
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
+
+local keymap = require('utils.keymap')
 local nmap, imap, cmap, xmap, vmap, tmap = keymap.nmap, keymap.imap, keymap.cmap, keymap.xmap, keymap.vmap, keymap.tmap
 local silent, noremap, expr = keymap.silent, keymap.noremap, keymap.expr
 local opts = keymap.new_opts
@@ -38,18 +42,16 @@ imap({
 
 -- commandline remap
 cmap({ '<C-b>', '<Left>', opts(noremap) })
+
 -- usage of plugins
 nmap({
   -- plugin manager: Lazy.nvim
   { '<Leader>pu', cmd('Lazy update'), opts(noremap, silent, 'Plugin: Update') },
   { '<Leader>pi', cmd('Lazy install'), opts(noremap, silent, 'Plugin: Install') },
-  -- dashboard  cannot use following command
-  -- { '<Leader>n', cmd('DashboardNewFile'), opts(noremap, silent, 'Dashboard: New file') },
-  -- { '<Leader>ss', cmd('SessionSave'), opts(noremap, silent, 'Dashboard: Save session') },
-  -- { '<Leader>sl', cmd('SessionLoad'), opts(noremap, silent, 'Dashboard: Load session') },
 
   -- nvimtree
   { '<Leader>e', cmd('NvimTreeToggle'), opts(noremap, silent, 'NvimTree: Toggle filer') },
+  { '<Leader>E', cmd('Neotree toggle'), opts(noremap, silent, 'Neo-tree: Toggle filer') },
   -- Telescope
   { '<Leader>b', cmd('Telescope buffers'), opts(noremap, silent, 'Telescope: Buffers') },
   { '<Leader>fa', cmd('Telescope live_grep'), opts(noremap, silent, 'Telescope: Live grep') },
@@ -73,9 +75,6 @@ nmap({
 
   -- lazygit
   { '<Leader>lg', cmd('LazyGit'), opts(noremap, silent, 'Git: Toggle lazygit') },
-
-  -- legendary
-  -- {'<C-p>', cmd('Legendary')}
 })
 
 -- Completion
@@ -83,7 +82,7 @@ nmap({
   { 'gf', cmd('LspZeroFormat!'), opts(noremap, silent, 'LSP: Code formatting') },
   -- Lspsaga
   { 'K', cmd('Lspsaga hover_doc'), opts(noremap, silent, 'LSP: Hover doc (Lspsaga)') },
-  -- { '<F2>', cmd('Lspsaga rename'), opts(noremap, silent, 'LSP: Rename (Lspsaga)') },
+  -- IncRename
   {
     '<F2>',
     function()
@@ -158,10 +157,8 @@ nmap({
   cmd('TabToggleTerm!'),
   opts(noremap, silent, 'ToggleTerm: Launch terminal on horizonal window'),
 })
-
 tmap({
   '<ESC><ESC>',
   '<C-\\><C-n>',
   opts(noremap, 'Escape terminal mode'),
 })
-

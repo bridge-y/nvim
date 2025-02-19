@@ -1,6 +1,6 @@
 # Neovim configuration
 
-This repository is my own configuration of Neovim based on [dope](https://github.com/glepnir/dope).
+This repository is my own configuration of Neovim based on [LazyVim](https://github.com/LazyVim/starter).
 
 ## Usage
 
@@ -52,6 +52,3 @@ I have prepared the following two methods.
 
 There is another way to use the [nvim-dev-container](https://github.com/esensar/nvim-dev-container) plugin, but it did not work in my environment.
 
-## Notes
-
-- `dope` command does not work correctly.
