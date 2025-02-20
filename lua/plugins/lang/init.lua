@@ -104,7 +104,19 @@ return {
   -- 'topazape/md-preview.nvim',
   {
     'topazape/md-preview.nvim',
-    ft = { 'md', 'markdown', 'mkd', 'mkdn', 'mdwn', 'mdown', 'mdtxt', 'mdtext', 'rmd', 'wiki', 'zettelkasten' },
+    ft = {
+      'md',
+      'markdown',
+      'mkd',
+      'mkdn',
+      'mdwn',
+      'mdown',
+      'mdtxt',
+      'mdtext',
+      'rmd',
+      'wiki',
+      'telekasten',
+    },
     opts = {},
   },
 
