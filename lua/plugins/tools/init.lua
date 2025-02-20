@@ -369,7 +369,11 @@ return {
     version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
     opts = {
       -- add any opts here
-      provider = 'ollama',
+      provider = 'gemini',
+      auto_suggestions_provider = 'gemini',
+      behaviour = {
+        auto_apply_diff_after_generation = true,
+      },
       vendors = {
         ollama = {
           __inherited_from = 'openai',
@@ -379,6 +383,9 @@ return {
           endpoint = 'http://192.0.2.1:11434/v1',
           model = 'phi4',
         },
+      },
+      gemini = {
+        model = 'gemini-2.0-flash',
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
