@@ -385,6 +385,149 @@ return {
   },
   -- 'rcarriga/nvim-notify',  -- if disabled, always use mini view
 
+  -- 'nvim-lualine/lualine.nvim',
+  {
+    'nvim-lualine/lualine.nvim',
+    event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+    config = function()
+      local function diff_source()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+          return {
+            added = gitsigns.added,
+            modified = gitsigns.changed,
+            removed = gitsigns.removed,
+          }
+        end
+      end
+
+      local function python_venv()
+        local function env_cleanup(venv)
+          if string.find(venv, '/') then
+            local final_venv = venv
+            for w in venv:gmatch('([^/]+)') do
+              final_venv = w
+            end
+            venv = final_venv
+          end
+          return venv
+        end
+
+        if vim.bo.filetype == 'python' then
+          local venv = os.getenv('CONDA_DEFAULT_ENV')
+          if venv then
+            return string.format('%s', env_cleanup(venv))
+          end
+          venv = os.getenv('VIRTUAL_ENV')
+          if venv then
+            return string.format('%s', env_cleanup(venv))
+          end
+        end
+        return ''
+      end
+
+      local function lsp_client(msg)
+        msg = msg or ''
+        local buf_clients = vim.lsp.get_active_clients({ bufnr = 0 })
+
+        if next(buf_clients) == nil then
+          if type(msg) == 'boolean' or #msg == 0 then
+            return ''
+          end
+          return msg
+        end
+
+        local buf_ft = vim.bo.filetype
+        local buf_client_names = {}
+
+        -- add client
+        for _, client in pairs(buf_clients) do
+          if client.name ~= 'null-ls' then
+            table.insert(buf_client_names, client.name)
+          end
+        end
+
+        -- add formatter
+        local lsp_utils = require('modules.completion.utils')
+        local formatters = lsp_utils.list_formatters(buf_ft)
+        vim.list_extend(buf_client_names, formatters)
+
+        -- add linter
+        local linters = lsp_utils.list_linters(buf_ft)
+        vim.list_extend(buf_client_names, linters)
+
+        -- add hover
+        local hovers = lsp_utils.list_hovers(buf_ft)
+        vim.list_extend(buf_client_names, hovers)
+
+        -- add code action
+        local code_actions = lsp_utils.list_code_actions(buf_ft)
+        vim.list_extend(buf_client_names, code_actions)
+
+        local hash = {}
+        local client_names = {}
+        for _, v in ipairs(buf_client_names) do
+          if not hash[v] then
+            client_names[#client_names + 1] = v
+            hash[v] = true
+          end
+        end
+        table.sort(client_names)
+        return '' .. ' ' .. table.concat(client_names, ', ') .. ' ' .. ''
+      end
+
+      require('lualine').setup({
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = {
+            'branch',
+            { 'diff', source = diff_source },
+            {
+              'diagnostics',
+              symbols = {
+                error = ' ',
+                warn = ' ',
+                info = ' ',
+                hint = ' ',
+              },
+            },
+          },
+          lualine_c = {
+            'filename',
+            {
+              lsp_client,
+              colored = true,
+              on_click = function()
+                vim.cmd([[LspInfo]])
+              end,
+            },
+          },
+          lualine_x = {
+            {
+              require('noice').api.statusline.mode.get,
+              cond = require('noice').api.statusline.mode.has,
+              color = { fg = '#ff9e64' },
+            },
+            { 'filetype', colored = true, icon_only = true },
+            { python_venv },
+            { 'encoding' },
+            {
+              'fileformat',
+              icons_enabled = true,
+            },
+          },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
+        },
+        extentions = {
+          'fugitive',
+          'nvim-tree',
+          'toggleterm',
+        },
+      })
+    end,
+  },
+
   -- gitsigns.nvim
   {
     'lewis6991/gitsigns.nvim',
