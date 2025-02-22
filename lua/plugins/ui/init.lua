@@ -448,7 +448,7 @@ return {
         end
 
         -- add formatter
-        local lsp_utils = require('modules.completion.utils')
+        local lsp_utils = require('plugins.completion.utils')
         local formatters = lsp_utils.list_formatters(buf_ft)
         vim.list_extend(buf_client_names, formatters)
 
