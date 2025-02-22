@@ -221,7 +221,7 @@ return {
   {
     'watanany/tabtoggleterm.nvim',
     event = 'UIEnter',
-    ops = {
+    opts = {
       size = 20,
     },
   },
