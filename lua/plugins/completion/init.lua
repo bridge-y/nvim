@@ -450,35 +450,35 @@ return {
         root_dir = require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git', 'pyproject.toml'),
         sources = {
           --- Replace these with the tools you have installed
-          null_ls.builtins.formatting.black.with({
-            extra_args = { '--config', 'pyproject.toml' },
-            condition = function(utils)
-              return utils.root_has_file({ 'pyproject.toml' })
-            end,
-          }),
+          -- null_ls.builtins.formatting.black.with({
+          --   extra_args = { '--config', 'pyproject.toml' },
+          --   condition = function(utils)
+          --     return utils.root_has_file({ 'pyproject.toml' })
+          --   end,
+          -- }),
           -- null_ls.builtins.diagnostics.pyproject_flake8,
           -- null_ls.builtins.formatting.isort,
-          null_ls.builtins.formatting.rustywind,
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.fish_indent,
-          null_ls.builtins.formatting.shfmt.with({
-            extra_args = { '-i', '2' },
-          }),
+          -- null_ls.builtins.formatting.rustywind,
+          -- null_ls.builtins.formatting.stylua,
+          -- null_ls.builtins.formatting.fish_indent,
+          -- null_ls.builtins.formatting.shfmt.with({
+          --   extra_args = { '-i', '2' },
+          -- }),
           -- null_ls.builtins.formatting.prettier,
           -- null_ls.builtins.diagnostics.textlint.with({ filetypes = { 'markdown', 'telekasten' } }),
           -- null_ls.builtins.formatting.prettier.with({ extra_filetypes = { 'telekasten', 'octo' } }),
-          null_ls.builtins.formatting.biome.with({
-            args = {
-              'check',
-              '--apply-unsafe',
-              '--formatter-enabled=true',
-              '--organize-imports-enabled=true',
-              '--skip-errors',
-              '$FILENAME',
-            },
-            filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'css', 'graphql' },
-          }),
-          null_ls.builtins.formatting.textlint.with({ extra_filetypes = { 'telekasten', 'octo' } }),
+          -- null_ls.builtins.formatting.biome.with({
+          --   args = {
+          --     'check',
+          --     '--apply-unsafe',
+          --     '--formatter-enabled=true',
+          --     '--organize-imports-enabled=true',
+          --     '--skip-errors',
+          --     '$FILENAME',
+          --   },
+          --   filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'css', 'graphql' },
+          -- }),
+          -- null_ls.builtins.formatting.textlint.with({ extra_filetypes = { 'telekasten', 'octo' } }),
           null_ls.builtins.diagnostics.textlint.with({ extra_filetypes = { 'telekasten' } }),
           null_ls.builtins.code_actions.gitsigns,
         },
@@ -529,16 +529,6 @@ return {
       format_on_save = { timeout_ms = 500, lsp_fallback = true },
       -- Customize formatters
       formatters = {
-        biome = {
-          args = {
-            'check',
-            '--apply-unsafe',
-            '--formatter-enabled=true',
-            '--organize-imports-enabled=true',
-            '--skip-errors',
-            '$FILENAME',
-          },
-        },
         black = {
           prepend_args = { '--config', 'pyproject.toml' },
         },
