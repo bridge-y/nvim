@@ -388,7 +388,7 @@ return {
   -- 'nvim-lualine/lualine.nvim',
   {
     'nvim-lualine/lualine.nvim',
-    event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+    event = 'VeryLazy',
     config = function()
       local function diff_source()
         local gitsigns = vim.b.gitsigns_status_dict
@@ -476,6 +476,10 @@ return {
         return '' .. ' ' .. table.concat(client_names, ', ') .. ' ' .. ''
       end
 
+      -- avante-status
+      local avante_chat_component = require('avante-status.lualine').chat_component
+      local avante_suggestions_component = require('avante-status.lualine').suggestions_component
+
       require('lualine').setup({
         sections = {
           lualine_a = { 'mode' },
@@ -515,6 +519,8 @@ return {
               'fileformat',
               icons_enabled = true,
             },
+            avante_chat_component,
+            avante_suggestions_component,
           },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
