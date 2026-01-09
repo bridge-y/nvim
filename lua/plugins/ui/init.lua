@@ -957,4 +957,18 @@ return {
       }
     end,
   },
+
+  -- vimade
+  {
+    'tadaa/vimade',
+    version = '*',
+    event = { 'BufReadPre', 'BufWritePre', 'BufNewFile' },
+    dependencies = { 'catppuccin' },
+    opts = function()
+      return {
+        fadelevel = 0.6,
+        basebg = require('kanagawa.colors').setup().palette.sumiInk3,
+      }
+    end,
+  },
 }
