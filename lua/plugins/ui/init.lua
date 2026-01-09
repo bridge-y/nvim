@@ -888,4 +888,32 @@ return {
     cmd = { 'DiffviewFileHistory', 'DiffviewOpen' },
     opts = {},
   },
+
+  -- modes.nvim
+  {
+    'mvllow/modes.nvim',
+    tag = 'v0.2.1',
+    opts = function()
+      -- Get the colors for the current theme
+      local colors = require('kanagawa.colors').setup()
+      local palette = colors.palette
+      return {
+        colors = {
+          copy = palette.carpYellow,
+          delete = palette.samuraiRed,
+          change = palette.waveRed,
+          format = palette.springViolet1,
+          insert = palette.autumnGreen,
+          replace = palette.oniViolet,
+          visual = palette.crystalBlue,
+        },
+        line_opacity = {
+          copy = 0.3,
+          delete = 0.3,
+          insert = 0.3,
+          visual = 0.3,
+        },
+      }
+    end,
+  },
 }
