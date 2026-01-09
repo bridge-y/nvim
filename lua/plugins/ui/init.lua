@@ -737,11 +737,13 @@ return {
   -- },
 
   -- incline.nvim
+  -- based on https://github.com/izumin5210/dotfiles/blob/35bc721/config/.config/nvim/lua/plugins/ui/incline.lua
   {
     'b0o/incline.nvim',
     -- event = 'VeryLazy',
     event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
     opts = function()
+      local devicons = require('nvim-web-devicons')
       -- Get the colors for the current theme
       local colors = require('kanagawa.colors').setup()
       local palette = colors.palette
@@ -749,6 +751,68 @@ return {
       -- local fg_active = palette.text
       local fg_active = palette.springBlue
       local fg_inactive = palette.fujiGray
+      local icons = { error = '󰅚 ', warn = '󰀪 ', hint = '󰌶 ', info = ' ' }
+
+      --- @param props { buf: number, win: number, focused: boolean }
+      local function get_diagnostic_label(props)
+        local label = {}
+
+        for severity, icon in pairs(icons) do
+          local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
+          if n > 0 then
+            table.insert(label, {
+              icon .. n .. ' ',
+              group = props.focused and ('DiagnosticSign' .. severity) or 'NonText',
+            })
+          end
+        end
+        if #label > 0 then
+          table.insert(label, { '┊ ', guifg = fg_inactive })
+        end
+        return label
+      end
+
+      local get_display_filename_and_dirname = require('plugins.ui.incline.get_display_filename_and_dirname')
+
+      -- based on https://github.com/b0o/incline.nvim/discussions/32
+      --- @param props { buf: number, win: number, focused: boolean }
+      local function render(props)
+        local filename, dirname = get_display_filename_and_dirname(props.buf)
+
+        local ft_icon, ft_color = devicons.get_icon_color(filename)
+
+        local hasError = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity['ERROR'] }) > 0
+        local isReadonly = vim.bo[props.buf].readonly
+
+        local fg_filename_active = hasError and palette.samuraiRed or (isReadonly and palette.fujiGray or fg_active)
+        local fg_filename = props.focused and fg_filename_active or fg_inactive
+
+        return {
+          { get_diagnostic_label(props) },
+          {
+            (ft_icon and ft_icon .. ' ' or ''),
+            guifg = props.focused and ft_color or fg_inactive,
+          },
+          {
+            (isReadonly and ' ' or ''),
+            guifg = fg_filename,
+          },
+          {
+            dirname and dirname .. '/' or '',
+            guifg = fg_inactive,
+          },
+          {
+            filename,
+            guifg = fg_filename,
+            gui = props.focused and 'bold' or '',
+          },
+          {
+            vim.bo[props.buf].modified and ' ●' or '',
+            guifg = props.focused and palette.peachRed or fg_inactive,
+          },
+        }
+      end
+
       return {
         highlight = {
           groups = {
@@ -767,54 +831,7 @@ return {
           margin = { horizontal = 0, vertical = 0 },
           padding = 2,
         },
-        render = function(props)
-          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
-          local ft_icon, ft_color = require('nvim-web-devicons').get_icon_color(filename)
-          local modified = vim.bo[props.buf].modified and 'bold,italic' or 'bold'
-
-          local function get_git_diff()
-            local icons = { removed = '', changed = '', added = '' }
-            icons['changed'] = icons.modified
-            local signs = vim.b[props.buf].gitsigns_status_dict
-            local labels = {}
-            if signs == nil then
-              return labels
-            end
-            for name, icon in pairs(icons) do
-              if tonumber(signs[name]) and signs[name] > 0 then
-                table.insert(labels, { icon .. signs[name] .. ' ', group = 'Diff' .. name })
-              end
-            end
-            if #labels > 0 then
-              table.insert(labels, { '┊ ' })
-            end
-            return labels
-          end
-          local function get_diagnostic_label()
-            local icons = { error = '', warn = '', info = '', hint = '' }
-            local label = {}
-
-            for severity, icon in pairs(icons) do
-              local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
-              if n > 0 then
-                table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
-              end
-            end
-            if #label > 0 then
-              table.insert(label, { '┊ ' })
-            end
-            return label
-          end
-
-          local buffer = {
-            { get_diagnostic_label() },
-            { get_git_diff() },
-            { (ft_icon or '') .. ' ', guifg = ft_color, guibg = 'none' },
-            { filename .. ' ', gui = modified },
-            { '┊  ' .. vim.api.nvim_win_get_number(props.win), group = 'DevIconWindows' },
-          }
-          return buffer
-        end,
+        render = render,
       }
     end,
   },
