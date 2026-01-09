@@ -65,60 +65,60 @@ return {
   },
 
   -- berbecue
-  {
-    'utilyre/barbecue.nvim',
-    name = 'barbecue',
-    version = '*',
-    -- event = { "FocusLost", "CursorHold" },
-    event = 'BufReadPost',
-    opts = {
-      theme = {
-        -- this highlight is used to override other highlights
-        -- you can take advantage of its `bg` and set a background throughout your winbar
-        -- (e.g. basename will look like this: { fg = "#c0caf5", bold = true })
-        normal = { fg = '#c0caf5' },
-
-        -- these highlights correspond to symbols table from config
-        ellipsis = { fg = '#737aa2' },
-        separator = { fg = '#737aa2' },
-        modified = { fg = '#737aa2' },
-
-        -- these highlights represent the _text_ of three main parts of barbecue
-        dirname = { fg = '#737aa2' },
-        basename = { bold = true },
-        context = {},
-
-        -- these highlights are used for context/navic icons
-        context_file = { fg = '#ac8fe4' },
-        context_module = { fg = '#ac8fe4' },
-        context_namespace = { fg = '#ac8fe4' },
-        context_package = { fg = '#ac8fe4' },
-        context_class = { fg = '#ac8fe4' },
-        context_method = { fg = '#ac8fe4' },
-        context_property = { fg = '#ac8fe4' },
-        context_field = { fg = '#ac8fe4' },
-        context_constructor = { fg = '#ac8fe4' },
-        context_enum = { fg = '#ac8fe4' },
-        context_interface = { fg = '#ac8fe4' },
-        context_function = { fg = '#ac8fe4' },
-        context_variable = { fg = '#ac8fe4' },
-        context_constant = { fg = '#ac8fe4' },
-        context_string = { fg = '#ac8fe4' },
-        context_number = { fg = '#ac8fe4' },
-        context_boolean = { fg = '#ac8fe4' },
-        context_array = { fg = '#ac8fe4' },
-        context_object = { fg = '#ac8fe4' },
-        context_key = { fg = '#ac8fe4' },
-        context_null = { fg = '#ac8fe4' },
-        context_enum_member = { fg = '#ac8fe4' },
-        context_struct = { fg = '#ac8fe4' },
-        context_event = { fg = '#ac8fe4' },
-        context_operator = { fg = '#ac8fe4' },
-        context_type_parameter = { fg = '#ac8fe4' },
-      },
-    },
-  },
-  { 'SmiteshP/nvim-navic', lazy = true },
+  -- {
+  --   'utilyre/barbecue.nvim',
+  --   name = 'barbecue',
+  --   version = '*',
+  --   -- event = { "FocusLost", "CursorHold" },
+  --   event = 'BufReadPost',
+  --   opts = {
+  --     theme = {
+  --       -- this highlight is used to override other highlights
+  --       -- you can take advantage of its `bg` and set a background throughout your winbar
+  --       -- (e.g. basename will look like this: { fg = "#c0caf5", bold = true })
+  --       normal = { fg = '#c0caf5' },
+  --
+  --       -- these highlights correspond to symbols table from config
+  --       ellipsis = { fg = '#737aa2' },
+  --       separator = { fg = '#737aa2' },
+  --       modified = { fg = '#737aa2' },
+  --
+  --       -- these highlights represent the _text_ of three main parts of barbecue
+  --       dirname = { fg = '#737aa2' },
+  --       basename = { bold = true },
+  --       context = {},
+  --
+  --       -- these highlights are used for context/navic icons
+  --       context_file = { fg = '#ac8fe4' },
+  --       context_module = { fg = '#ac8fe4' },
+  --       context_namespace = { fg = '#ac8fe4' },
+  --       context_package = { fg = '#ac8fe4' },
+  --       context_class = { fg = '#ac8fe4' },
+  --       context_method = { fg = '#ac8fe4' },
+  --       context_property = { fg = '#ac8fe4' },
+  --       context_field = { fg = '#ac8fe4' },
+  --       context_constructor = { fg = '#ac8fe4' },
+  --       context_enum = { fg = '#ac8fe4' },
+  --       context_interface = { fg = '#ac8fe4' },
+  --       context_function = { fg = '#ac8fe4' },
+  --       context_variable = { fg = '#ac8fe4' },
+  --       context_constant = { fg = '#ac8fe4' },
+  --       context_string = { fg = '#ac8fe4' },
+  --       context_number = { fg = '#ac8fe4' },
+  --       context_boolean = { fg = '#ac8fe4' },
+  --       context_array = { fg = '#ac8fe4' },
+  --       context_object = { fg = '#ac8fe4' },
+  --       context_key = { fg = '#ac8fe4' },
+  --       context_null = { fg = '#ac8fe4' },
+  --       context_enum_member = { fg = '#ac8fe4' },
+  --       context_struct = { fg = '#ac8fe4' },
+  --       context_event = { fg = '#ac8fe4' },
+  --       context_operator = { fg = '#ac8fe4' },
+  --       context_type_parameter = { fg = '#ac8fe4' },
+  --     },
+  --   },
+  -- },
+  -- { 'SmiteshP/nvim-navic', lazy = true },
 
   -- vim-illuminate
   {
@@ -386,151 +386,412 @@ return {
   -- 'rcarriga/nvim-notify',  -- if disabled, always use mini view
 
   -- 'nvim-lualine/lualine.nvim',
+  -- {
+  --   'nvim-lualine/lualine.nvim',
+  --   -- event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+  --   event = 'VeryLazy',
+  --   config = function()
+  --     local function diff_source()
+  --       local gitsigns = vim.b.gitsigns_status_dict
+  --       if gitsigns then
+  --         return {
+  --           added = gitsigns.added,
+  --           modified = gitsigns.changed,
+  --           removed = gitsigns.removed,
+  --         }
+  --       end
+  --     end
+  --
+  --     local function python_venv()
+  --       local function env_cleanup(venv)
+  --         if string.find(venv, '/') then
+  --           local final_venv = venv
+  --           for w in venv:gmatch('([^/]+)') do
+  --             final_venv = w
+  --           end
+  --           venv = final_venv
+  --         end
+  --         return venv
+  --       end
+  --
+  --       if vim.bo.filetype == 'python' then
+  --         local venv = os.getenv('CONDA_DEFAULT_ENV')
+  --         if venv then
+  --           return string.format('%s', env_cleanup(venv))
+  --         end
+  --         venv = os.getenv('VIRTUAL_ENV')
+  --         if venv then
+  --           return string.format('%s', env_cleanup(venv))
+  --         end
+  --       end
+  --       return ''
+  --     end
+  --
+  --     local function lsp_client(msg)
+  --       msg = msg or ''
+  --       local buf_clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  --
+  --       if next(buf_clients) == nil then
+  --         if type(msg) == 'boolean' or #msg == 0 then
+  --           return ''
+  --         end
+  --         return msg
+  --       end
+  --
+  --       local buf_ft = vim.bo.filetype
+  --       local buf_client_names = {}
+  --
+  --       -- add client
+  --       for _, client in pairs(buf_clients) do
+  --         if client.name ~= 'null-ls' then
+  --           table.insert(buf_client_names, client.name)
+  --         end
+  --       end
+  --
+  --       -- add formatter
+  --       local lsp_utils = require('plugins.completion.utils')
+  --       local formatters = lsp_utils.list_formatters(buf_ft)
+  --       vim.list_extend(buf_client_names, formatters)
+  --
+  --       -- add linter
+  --       local linters = lsp_utils.list_linters(buf_ft)
+  --       vim.list_extend(buf_client_names, linters)
+  --
+  --       -- add hover
+  --       local hovers = lsp_utils.list_hovers(buf_ft)
+  --       vim.list_extend(buf_client_names, hovers)
+  --
+  --       -- add code action
+  --       local code_actions = lsp_utils.list_code_actions(buf_ft)
+  --       vim.list_extend(buf_client_names, code_actions)
+  --
+  --       local hash = {}
+  --       local client_names = {}
+  --       for _, v in ipairs(buf_client_names) do
+  --         if not hash[v] then
+  --           client_names[#client_names + 1] = v
+  --           hash[v] = true
+  --         end
+  --       end
+  --       table.sort(client_names)
+  --       return '' .. ' ' .. table.concat(client_names, ', ') .. ' ' .. ''
+  --     end
+  --
+  --     -- avante-status
+  --     local avante_chat_component = require('avante-status.lualine').chat_component
+  --     local avante_suggestions_component = require('avante-status.lualine').suggestions_component
+  --
+  --     require('lualine').setup({
+  --       sections = {
+  --         lualine_a = { 'mode' },
+  --         lualine_b = {
+  --           'branch',
+  --           { 'diff', source = diff_source },
+  --           {
+  --             'diagnostics',
+  --             symbols = {
+  --               error = ' ',
+  --               warn = ' ',
+  --               info = ' ',
+  --               hint = ' ',
+  --             },
+  --           },
+  --         },
+  --         lualine_c = {
+  --           'filename',
+  --           {
+  --             lsp_client,
+  --             colored = true,
+  --             on_click = function()
+  --               vim.cmd([[LspInfo]])
+  --             end,
+  --           },
+  --         },
+  --         lualine_x = {
+  --           {
+  --             require('noice').api.statusline.mode.get,
+  --             cond = require('noice').api.statusline.mode.has,
+  --             color = { fg = '#ff9e64' },
+  --           },
+  --           { 'filetype', colored = true, icon_only = true },
+  --           { python_venv },
+  --           { 'encoding' },
+  --           {
+  --             'fileformat',
+  --             icons_enabled = true,
+  --           },
+  --           avante_chat_component,
+  --           avante_suggestions_component,
+  --         },
+  --         lualine_y = { 'progress' },
+  --         lualine_z = { 'location' },
+  --       },
+  --       extentions = {
+  --         'fugitive',
+  --         'nvim-tree',
+  --         'toggleterm',
+  --       },
+  --     })
+  --   end,
+  -- },
+
+  -- 'rebelot/heirline.nvim',
+  -- { 'zeioth/heirline-components.nvim', lazy = true },
+  -- {
+  --   'rebelot/heirline.nvim',
+  --   event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+  --   config = function()
+  --     local function lsp_client(msg)
+  --       msg = msg or ''
+  --       local buf_clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  --
+  --       if next(buf_clients) == nil then
+  --         if type(msg) == 'boolean' or #msg == 0 then
+  --           return ''
+  --         end
+  --         return msg
+  --       end
+  --
+  --       local buf_ft = vim.bo.filetype
+  --       local buf_client_names = {}
+  --
+  --       -- add client
+  --       for _, client in pairs(buf_clients) do
+  --         if client.name ~= 'null-ls' then
+  --           table.insert(buf_client_names, client.name)
+  --         end
+  --       end
+  --
+  --       -- add formatter
+  --       local lsp_utils = require('plugins.completion.utils')
+  --       local formatters = lsp_utils.list_formatters(buf_ft)
+  --       vim.list_extend(buf_client_names, formatters)
+  --
+  --       -- add linter
+  --       local linters = lsp_utils.list_linters(buf_ft)
+  --       vim.list_extend(buf_client_names, linters)
+  --
+  --       -- add hover
+  --       local hovers = lsp_utils.list_hovers(buf_ft)
+  --       vim.list_extend(buf_client_names, hovers)
+  --
+  --       -- add code action
+  --       local code_actions = lsp_utils.list_code_actions(buf_ft)
+  --       vim.list_extend(buf_client_names, code_actions)
+  --
+  --       local hash = {}
+  --       local client_names = {}
+  --       for _, v in ipairs(buf_client_names) do
+  --         if not hash[v] then
+  --           client_names[#client_names + 1] = v
+  --           hash[v] = true
+  --         end
+  --       end
+  --       table.sort(client_names)
+  --       return '' .. ' [' .. table.concat(client_names, ' ') .. ']'
+  --     end
+  --
+  --     local kanagawa = require('kanagawa.colors').setup()
+  --     local palette = kanagawa.palette
+  --
+  --     local lib = require('heirline-components.all')
+  --     local conditions = require('heirline.conditions')
+  --     local LSPActive = {
+  --       condition = conditions.lsp_attached,
+  --       update = { 'LspAttach', 'LspDetach' },
+  --       provider = lsp_client,
+  --       on_click = {
+  --         callback = function()
+  --           vim.defer_fn(function()
+  --             vim.cmd('LspInfo')
+  --           end, 100)
+  --         end,
+  --         name = 'heirline_LSP',
+  --       },
+  --     }
+  --
+  --     -- FileName and friends
+  --     local conditions = require('heirline.conditions')
+  --     local utils = require('heirline.utils')
+  --     local FileNameBlock = {
+  --       -- let's first set up some attributes needed by this component and its children
+  --       init = function(self)
+  --         self.filename = vim.api.nvim_buf_get_name(0)
+  --       end,
+  --     }
+  --     -- We can now define some children separately and add them later
+  --
+  --     local FileIcon = {
+  --       init = function(self)
+  --         local filename = self.filename
+  --         local extension = vim.fn.fnamemodify(filename, ':e')
+  --         self.icon, self.icon_color =
+  --           require('nvim-web-devicons').get_icon_color(filename, extension, { default = true })
+  --       end,
+  --       provider = function(self)
+  --         return self.icon and (self.icon .. ' ')
+  --       end,
+  --       hl = function(self)
+  --         return { fg = self.icon_color }
+  --       end,
+  --     }
+  --
+  --     local FileName = {
+  --       provider = function(self)
+  --         -- first, trim the pattern relative to the current directory. For other
+  --         -- options, see :h filename-modifers
+  --         local filename = vim.fn.fnamemodify(self.filename, ':.')
+  --         if filename == '' then
+  --           return '[No Name]'
+  --         end
+  --         -- now, if the filename would occupy more than 1/4th of the available
+  --         -- space, we trim the file path to its initials
+  --         -- See Flexible Components section below for dynamic truncation
+  --         if not conditions.width_percent_below(#filename, 0.25) then
+  --           filename = vim.fn.pathshorten(filename)
+  --         end
+  --         return filename
+  --       end,
+  --       hl = { fg = utils.get_highlight('Directory').fg },
+  --     }
+  --
+  --     local FileFlags = {
+  --       {
+  --         condition = function()
+  --           return vim.bo.modified
+  --         end,
+  --         provider = '[+]',
+  --         hl = { fg = 'green' },
+  --       },
+  --       {
+  --         condition = function()
+  --           return not vim.bo.modifiable or vim.bo.readonly
+  --         end,
+  --         provider = '',
+  --         hl = { fg = 'orange' },
+  --       },
+  --     }
+  --
+  --     -- Now, let's say that we want the filename color to change if the buffer is
+  --     -- modified. Of course, we could do that directly using the FileName.hl field,
+  --     -- but we'll see how easy it is to alter existing components using a "modifier"
+  --     -- component
+  --
+  --     local FileNameModifer = {
+  --       hl = function()
+  --         if vim.bo.modified then
+  --           -- use `force` because we need to override the child's hl foreground
+  --           return { fg = 'cyan', bold = true, force = true }
+  --         end
+  --       end,
+  --     }
+  --
+  --     -- let's add the children to our FileNameBlock component
+  --     FileNameBlock = utils.insert(
+  --       FileNameBlock,
+  --       FileIcon,
+  --       utils.insert(FileNameModifer, FileName), -- a new table where FileName is a child of FileNameModifier
+  --       FileFlags,
+  --       { provider = '%<' } -- this means that the statusline is cut here when there's not enough space
+  --     )
+  --
+  --     local settings = {
+  --       statuscolumn = {
+  --         init = function(self)
+  --           self.bufnr = vim.api.nvim_get_current_buf()
+  --         end,
+  --         lib.component.foldcolumn(),
+  --         lib.component.fill(),
+  --         lib.component.numbercolumn(),
+  --         lib.component.signcolumn(),
+  --       } or nil,
+  --       statusline = {
+  --         hl = { fg = palette.oldWhite, bg = palette.sumiInk0 },
+  --         lib.component.mode({ mode_text = { pad_text = 'center' } }),
+  --         lib.component.git_branch(),
+  --         lib.component.git_diff(),
+  --         lib.component.diagnostics(),
+  --         -- lib.component.file_info({ file_icon = false, filetype = false, filename = {}, file_modifiled = false }),
+  --         FileNameBlock,
+  --         lib.component.fill(),
+  --         lib.component.cmd_info(),
+  --         lib.component.fill(),
+  --         -- lib.component.lsp(),
+  --         LSPActive,
+  --         -- lib.component.file_info({ filetype = false, surround = { separator = 'right' } }),
+  --         lib.component.file_encoding({
+  --           file_format = { padding = { left = 1, right = 0 } },
+  --           file_encoding = { padding = { left = 1, right = 0 } },
+  --         }),
+  --         lib.component.virtual_env(),
+  --         lib.component.nav({ ruler = false, percentage = { padding = { left = 0 } }, scrollbar = false }),
+  --         lib.component.mode({ surround = { separator = 'right' } }),
+  --       },
+  --     }
+  --
+  --     local heirline = require('heirline')
+  --     lib.init.subscribe_to_events()
+  --     heirline.load_colors(lib.hl.get_colors())
+  --     heirline.setup(settings)
+  --   end,
+  -- },
+
+  -- incline.nvim
   {
-    'nvim-lualine/lualine.nvim',
-    event = 'VeryLazy',
-    config = function()
-      local function diff_source()
-        local gitsigns = vim.b.gitsigns_status_dict
-        if gitsigns then
-          return {
-            added = gitsigns.added,
-            modified = gitsigns.changed,
-            removed = gitsigns.removed,
-          }
-        end
-      end
+    'b0o/incline.nvim',
+    -- event = 'VeryLazy',
+    event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
+    opts = function()
+      return {
+        render = function(props)
+          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
+          local ft_icon, ft_color = require('nvim-web-devicons').get_icon_color(filename)
+          local modified = vim.bo[props.buf].modified and 'bold,italic' or 'bold'
 
-      local function python_venv()
-        local function env_cleanup(venv)
-          if string.find(venv, '/') then
-            local final_venv = venv
-            for w in venv:gmatch('([^/]+)') do
-              final_venv = w
+          local function get_git_diff()
+            local icons = { removed = '', changed = '', added = '' }
+            icons['changed'] = icons.modified
+            local signs = vim.b[props.buf].gitsigns_status_dict
+            local labels = {}
+            if signs == nil then
+              return labels
             end
-            venv = final_venv
+            for name, icon in pairs(icons) do
+              if tonumber(signs[name]) and signs[name] > 0 then
+                table.insert(labels, { icon .. signs[name] .. ' ', group = 'Diff' .. name })
+              end
+            end
+            if #labels > 0 then
+              table.insert(labels, { '┊ ' })
+            end
+            return labels
           end
-          return venv
-        end
+          local function get_diagnostic_label()
+            local icons = { error = '', warn = '', info = '', hint = '' }
+            local label = {}
 
-        if vim.bo.filetype == 'python' then
-          local venv = os.getenv('CONDA_DEFAULT_ENV')
-          if venv then
-            return string.format('%s', env_cleanup(venv))
+            for severity, icon in pairs(icons) do
+              local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
+              if n > 0 then
+                table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
+              end
+            end
+            if #label > 0 then
+              table.insert(label, { '┊ ' })
+            end
+            return label
           end
-          venv = os.getenv('VIRTUAL_ENV')
-          if venv then
-            return string.format('%s', env_cleanup(venv))
-          end
-        end
-        return ''
-      end
 
-      local function lsp_client(msg)
-        msg = msg or ''
-        local buf_clients = vim.lsp.get_active_clients({ bufnr = 0 })
-
-        if next(buf_clients) == nil then
-          if type(msg) == 'boolean' or #msg == 0 then
-            return ''
-          end
-          return msg
-        end
-
-        local buf_ft = vim.bo.filetype
-        local buf_client_names = {}
-
-        -- add client
-        for _, client in pairs(buf_clients) do
-          if client.name ~= 'null-ls' then
-            table.insert(buf_client_names, client.name)
-          end
-        end
-
-        -- add formatter
-        local lsp_utils = require('plugins.completion.utils')
-        local formatters = lsp_utils.list_formatters(buf_ft)
-        vim.list_extend(buf_client_names, formatters)
-
-        -- add linter
-        local linters = lsp_utils.list_linters(buf_ft)
-        vim.list_extend(buf_client_names, linters)
-
-        -- add hover
-        local hovers = lsp_utils.list_hovers(buf_ft)
-        vim.list_extend(buf_client_names, hovers)
-
-        -- add code action
-        local code_actions = lsp_utils.list_code_actions(buf_ft)
-        vim.list_extend(buf_client_names, code_actions)
-
-        local hash = {}
-        local client_names = {}
-        for _, v in ipairs(buf_client_names) do
-          if not hash[v] then
-            client_names[#client_names + 1] = v
-            hash[v] = true
-          end
-        end
-        table.sort(client_names)
-        return '' .. ' ' .. table.concat(client_names, ', ') .. ' ' .. ''
-      end
-
-      -- avante-status
-      local avante_chat_component = require('avante-status.lualine').chat_component
-      local avante_suggestions_component = require('avante-status.lualine').suggestions_component
-
-      require('lualine').setup({
-        sections = {
-          lualine_a = { 'mode' },
-          lualine_b = {
-            'branch',
-            { 'diff', source = diff_source },
-            {
-              'diagnostics',
-              symbols = {
-                error = ' ',
-                warn = ' ',
-                info = ' ',
-                hint = ' ',
-              },
-            },
-          },
-          lualine_c = {
-            'filename',
-            {
-              lsp_client,
-              colored = true,
-              on_click = function()
-                vim.cmd([[LspInfo]])
-              end,
-            },
-          },
-          lualine_x = {
-            {
-              require('noice').api.statusline.mode.get,
-              cond = require('noice').api.statusline.mode.has,
-              color = { fg = '#ff9e64' },
-            },
-            { 'filetype', colored = true, icon_only = true },
-            { python_venv },
-            { 'encoding' },
-            {
-              'fileformat',
-              icons_enabled = true,
-            },
-            avante_chat_component,
-            avante_suggestions_component,
-          },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location' },
-        },
-        extentions = {
-          'fugitive',
-          'nvim-tree',
-          'toggleterm',
-        },
-      })
+          local buffer = {
+            { get_diagnostic_label() },
+            { get_git_diff() },
+            { (ft_icon or '') .. ' ', guifg = ft_color, guibg = 'none' },
+            { filename .. ' ', gui = modified },
+            { '┊  ' .. vim.api.nvim_win_get_number(props.win), group = 'DevIconWindows' },
+          }
+          return buffer
+        end,
+      }
     end,
   },
 
