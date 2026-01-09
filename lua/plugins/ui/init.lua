@@ -742,7 +742,31 @@ return {
     -- event = 'VeryLazy',
     event = { 'BufReadPost', 'BufAdd', 'BufNewFile' },
     opts = function()
+      -- Get the colors for the current theme
+      local colors = require('kanagawa.colors').setup()
+      local palette = colors.palette
+
+      -- local fg_active = palette.text
+      local fg_active = palette.springBlue
+      local fg_inactive = palette.fujiGray
       return {
+        highlight = {
+          groups = {
+            InclineNormal = { guibg = palette.sumiInk3, guifg = fg_active },
+            InclineNormalNC = { guibg = 'none', guifg = fg_inactive },
+          },
+        },
+        window = {
+          options = {
+            winblend = 0,
+          },
+          placement = {
+            horizontal = 'right',
+            vertical = 'bottom',
+          },
+          margin = { horizontal = 0, vertical = 0 },
+          padding = 2,
+        },
         render = function(props)
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
           local ft_icon, ft_color = require('nvim-web-devicons').get_icon_color(filename)
