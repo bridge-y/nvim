@@ -361,13 +361,6 @@ return {
     opts = {},
   },
 
-  -- 'takeshid/avante-status.nvim',
-  {
-    'takeshid/avante-status.nvim',
-    lazy = true,
-    opts = {},
-  },
-
   -- 'yetone/avante.nvim',
   {
     'yetone/avante.nvim',
@@ -376,28 +369,12 @@ return {
     version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
     opts = function(_, opt)
       -- avante config
-      opt.provider = require('avante-status').get_chat_provider({
-        'gemini',
-        'ollama',
-      })
-      opt.auto_suggestions_provider = require('avante-status').get_suggestions_provider({
-        'gemini',
-        'ollama',
-      })
+      opt.provider = 'gemini'
+      opt.auto_suggestions_provider = 'gemini'
       opt.behaviour = {
         auto_apply_diff_after_generation = true,
       }
-      opt.vendors = {
-        ollama = {
-          __inherited_from = 'openai',
-          api_key_name = '',
-          disable_tools = true,
-          -- TODO: replace ip address and model name
-          endpoint = require('avante-status').getenv_if('OLLAMA_ENDPOINT', ''),
-          model = 'phi4',
-        },
-      }
-      opt.gemini = {
+      opt.providers.gemini = {
         model = 'gemini-2.0-flash',
       }
 
