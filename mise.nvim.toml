@@ -1,0 +1,10 @@
+[tools]
+delta = "latest"
+lazygit = "latest"
+lua-language-server = "latest"
+neovim = "latest"
+node = "22"
+npm = "latest"
+"npm:commitizen" = "latest"
+"npm:cz-conventional-changelog" = "latest"
+rust = "latest"
