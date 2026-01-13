@@ -9,7 +9,7 @@ return {
 
   -- 'williamboman/mason.nvim',
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = 'Mason',
     build = ':MasonUpdate',
     lazy = false,
@@ -153,8 +153,9 @@ return {
     'neovim/nvim-lspconfig',
     cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
     event = { 'BufReadPre', 'BufNewFile', 'BufNew' },
+    -- ref: https://lsp-zero.netlify.app/docs/guide/lazy-loading-with-lazy-nvim.html
     config = function()
-      local lsp_zero = require('lsp-zero')
+      local lsp_defaults = require('lspconfig').util.default_config
 
       -- lsp_signature
       -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
@@ -167,144 +168,278 @@ return {
         },
       }
 
-      local lsp_attach = function(client, buffer)
-        lsp_zero.default_keymaps({
-          buffer = bufnr,
-          omit = {
-            '<F2>',
-            'K',
-            'gd',
-            '[d',
-            ']d',
-            '<F4>',
-            'gl',
-          },
-        })
-        require('lsp_signature').on_attach(lsp_signature_config, bufnr)
-      end
+      -- Add cmp_nvim_lsp capabilities settings to lspconfig
+      -- This should be executed before you configure any language server
+      lsp_defaults.capabilities =
+        vim.tbl_deep_extend('force', lsp_defaults.capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      -- for rustaceanvim
-      vim.g.rustaceanvim = {
-        server = {
-          capabilities = lsp_zero.get_capabilities(),
-        },
-      }
+      -- LspAttach is where you enable features that only work
+      -- if there is a language server active in the file
+      vim.api.nvim_create_autocmd('LspAttach', {
+        desc = 'LSP actions',
+        callback = function(event)
+          local opts = { buffer = event.buf }
 
-      -- for nvim-ufo
-      local lsp_capabilities = vim.tbl_deep_extend('force', require('cmp_nvim_lsp').default_capabilities(), {
-        textDocument = {
-          foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true,
-          },
-        },
-      })
+          -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+          -- vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+          vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+          vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+          vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+          vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+          vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+          -- vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+          vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+          -- vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 
-      lsp_zero.extend_lspconfig({
-        capabilities = lsp_capabilities,
-        lsp_attach = lsp_attach,
+          require('lsp_signature').on_attach(lsp_signature_config, event.buf)
+        end,
       })
 
       -- diagnostic text setting
-      vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
-
-      lsp_zero.ui({
-        float_border = 'rounded',
-        error = ' ',
-        warn = ' ',
-        info = ' ',
-        hint = ' ',
+      -- ref: https://github.com/izumin5210/dotfiles/blob/aa17b272068491d24e7e52bd9fb58903c6947e4f/config/.config/nvim/lua/plugins/lsp/init.lua
+      vim.diagnostic.config({
+        virtual_text = { prefix = '🔥', source = true },
+        severity_sort = true,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = ' ',
+            [vim.diagnostic.severity.WARN] = ' ',
+            [vim.diagnostic.severity.INFO] = ' ',
+            [vim.diagnostic.severity.HINT] = ' ',
+          },
+          linehl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticErrorLine',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticWarnLine',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticHintLine',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticInfoLine',
+          },
+        },
       })
+      local signs = {
+        Error = ' ',
+        Warn = ' ',
+        Info = ' ',
+        Hint = ' ',
+      }
+      for type, icon in pairs(signs) do
+        local name = 'DiagnosticSign' .. type
+        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
+      end
 
-      local conf = require('plugins.completion.lspconfig')
-      local ih = require('lsp-inlayhints')
       require('neodev').setup({})
 
-      require('mason-lspconfig').setup({
-        ensure_installed = {
-          -- nlsp-settings requires jsonls
-          'jsonls',
-          -- python
-          'pyright',
-          'ruff',
-          -- rust
-          'rust_analyzer',
-          -- docker
-          'dockerls',
-          'docker_compose_language_service',
-          -- markdown
-          'marksman',
-          -- javascript/typescript
-          'biome',
-          'html',
-          'tailwindcss',
-          -- golang
-          'gopls',
-          -- bash
-          'bashls',
-          -- "diagnosticls",
-        },
-        handlers = {
-          lsp_zero.default_setup,
-          lua_ls = function()
-            require('lspconfig').lua_ls.setup({
-              on_attach = function(client, bufnr)
-                ih.on_attach(client, bufnr)
-              end,
-              settings = {
-                Lua = {
-                  hint = {
-                    enable = true,
-                  },
-                  completion = {
-                    callSnippet = 'Replace',
-                  },
-                },
-              },
-            })
-          end,
-          pyright = function()
-            require('lspconfig').pyright.setup(conf.pyright())
-          end,
-          rust_analyzer = lsp_zero.noop, -- for rustaceanvim
-          gopls = function()
-            require('lspconfig').gopls.setup(conf.gopls())
-          end,
-          -- rust_analyzer = function()
-          --   require('lspconfig').rust_analyzer.setup(conf.rust_analyzer())
-          -- end,
-          -- diagnosticls = function()
-          --   lsp.configure('diagnosticls', conf.dls())
-          -- end,
-          ruff = require('lspconfig').ruff.setup(conf.ruff_lsp()),
-        },
+      -- lsp common setting
+      vim.lsp.config('*', {
+        on_attach = function(client, bufnr)
+          -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+          -- NOTE: To use fuzzy finder instead of quickfix list
+          -- other keymaps like GoToImplementation, GoToReferences are set in telescope.nvim config
+          -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'LSP: [G]oto [D]efinition' })
+          -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'LSP: [G]oto [D]eclaration' })
+
+          -- vim.lsp.completion.enable(true, client.id, bufnr, {
+          --   autotrigger = true, -- 自動補完を有効にする
+          --   convert = function(item)
+          --     return { abbr = item.label:gsub('%b()', '') }
+          --   end,
+          -- })
+
+          -- -- Inlay hints (Neovim 0.10+)
+          -- if vim.lsp.inlay_hint then
+          --   vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+          -- end
+
+          -- -- Format on save (opt-in per server)
+          -- if client.server_capabilities.documentFormattingProvider then
+          --   vim.api.nvim_create_autocmd('BufWritePre', {
+          --     buffer = bufnr,
+          --     callback = function()
+          --       vim.lsp.buf.format({ async = false })
+          --     end,
+          --   })
+          -- end
+          require('lsp_signature').on_attach(lsp_signature_config, bufnr)
+        end,
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
 
-      -- format on save
-      lsp_zero.format_on_save({
-        format_opts = {
-          timeout_ms = 10000,
-        },
-        servers = {
-          ['null-ls'] = {
-            'markdown',
-            'telekasten',
-            'lua',
-            'octo',
-            'sh',
-            'javascript',
-            'javascriptreact',
-            'typescript',
-            'typescriptreact',
-          },
-          ['rust_analyzer'] = { 'rust' },
-          ['ruff'] = { 'python' },
-        },
+      require('mason-lspconfig').setup()
+
+      -- These are just examples. Replace them with the language
+      -- servers you have installed in your system
+      vim.lsp.enable({
+        -- nvim-lspconfig で"lua_ls"という名前で設定したプリセットが読まれる
+        -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/lua_ls.lua
+        'lua_ls',
+        'pyright',
+        'rust_analyzer',
+        'pylsp',
+        'tsserver',
+        'gopls',
+        'ruff',
+        'biome',
+        'dockerls',
+        'docker_compose_language_service',
+        'dockerfile_language_server',
+        'jsonls',
+        'marksman',
+        'shellcheck',
+        'shfmt',
+        'stylua',
       })
     end,
+    -- config = function()
+    --   local lsp_zero = require('lsp-zero')
+    --
+    --   -- lsp_signature
+    --   -- onttps://github.com/VonHeikemen/lsp-zero.nvim/issues/69
+    --   local lsp_signature_config = {
+    --     bind = true, -- This is mandatory, otherwise border config won't get registered.
+    --     fix_pos = true, -- set to true, the floating window will not auto-close until finish all parameters
+    --     noice = true, -- set to true if you using noice to render markdown
+    --     handler_opts = {
+    --       border = 'rounded',
+    --     },
+    --   }
+    --
+    --   local lsp_attach = function(client, buffer)
+    --     lsp_zero.default_keymaps({
+    --       buffer = bufnr,
+    --       omit = {
+    --         '<F2>',
+    --         'K',
+    --         'gd',
+    --         '[d',
+    --         ']d',
+    --         '<F4>',
+    --         'gl',
+    --       },
+    --     })
+    --     require('lsp_signature').on_attach(lsp_signature_config, bufnr)
+    --   end
+    --
+    --   -- for rustaceanvim
+    --   vim.g.rustaceanvim = {
+    --     server = {
+    --       capabilities = lsp_zero.get_capabilities(),
+    --     },
+    --   }
+    --
+    --   -- for nvim-ufo
+    --   local lsp_capabilities = vim.tbl_deepextend_lspconfig_extend('force', require('cmp_nvim_lsp').default_capabilities(), {
+    --     textDocument = {
+    --       foldingRange = {
+    --         dynamicRegistration = false,
+    --         lineFoldingOnly = true,
+    --       },
+    --     },
+    --   })
+    --
+    --   lsp_zero.extend_lspconfig({
+    --     capabilities = lsp_capabilities,
+    --     lsp_attach = lsp_attach,
+    --   })
+    --
+    --   -- diagnostic text setting
+    --   vim.diagnostic.config({ virtual_text = { prefix = '🔥', source = true } })
+    --
+    --   lsp_zero.ui({
+    --     float_border = 'rounded',
+    --     error = ' ',
+    --     warn = ' ',
+    --     info = ' ',
+    --     hint = ' ',
+    --   })
+    --
+    --   local conf = require('plugins.completion.lspconfig')
+    --   local ih = require('lsp-inlayhints')
+    --   require('neodev').setup({})
+    --
+    --   require('mason-lspconfig').setup({
+    --     ensure_installed = {
+    --       -- nlsp-settings requires jsonls
+    --       'jsonls',
+    --       -- python
+    --       'pyright',
+    --       'ruff',
+    --       -- rust
+    --       'rust_analyzer',
+    --       -- docker
+    --       'dockerls',
+    --       'docker_compose_language_service',
+    --       -- markdown
+    --       'marksman',
+    --       -- javascript/typescript
+    --       'biome',
+    --       'html',
+    --       'tailwindcss',
+    --       -- golang
+    --       'gopls',
+    --       -- bash
+    --       'bashls',
+    --       -- "diagnosticls",
+    --     },
+    --     handlers = {
+    --       lsp_zero.default_setup,
+    --       lua_ls = function()
+    --         require('lspconfig').lua_ls.setup({
+    --           on_attach = function(client, bufnr)
+    --             ih.on_attach(client, bufnr)
+    --           end,
+    --           settings = {
+    --             Lua = {
+    --               hint = {
+    --                 enable = true,
+    --               },
+    --               completion = {
+    --                 callSnippet = 'Replace',
+    --               },
+    --             },
+    --           },
+    --         })
+    --       end,
+    --       pyright = function()
+    --         require('lspconfig').pyright.setup(conf.pyright())
+    --       end,
+    --       rust_analyzer = lsp_zero.noop, -- for rustaceanvim
+    --       gopls = function()
+    --         require('lspconfig').gopls.setup(conf.gopls())
+    --       end,
+    --       -- rust_analyzer = function()
+    --       --   require('lspconfig').rust_analyzer.setup(conf.rust_analyzer())
+    --       -- end,
+    --       -- diagnosticls = function()
+    --       --   lsp.configure('diagnosticls', conf.dls())
+    --       -- end,
+    --       ruff = require('lspconfig').ruff.setup(conf.ruff_lsp()),
+    --     },
+    --   })
+    --
+    --   -- format on save
+    --   lsp_zero.format_on_save({
+    --     format_opts = {
+    --       timeout_ms = 10000,
+    --     },
+    --     servers = {
+    --       ['null-ls'] = {
+    --         'markdown',
+    --         'telekasten',
+    --         'lua',
+    --         'octo',
+    --         'sh',
+    --         'javascript',
+    --         'javascriptreact',
+    --         'typescript',
+    --         'typescriptreact',
+    --       },
+    --       ['rust_analyzer'] = { 'rust' },
+    --       ['ruff'] = { 'python' },
+    --     },
+    --   })
+    -- end,
   },
   { 'hrsh7th/cmp-nvim-lsp', lazy = true },
-  { 'williamboman/mason-lspconfig.nvim', lazy = true },
+  { 'mason-org/mason-lspconfig.nvim', lazy = true },
 
   -- LSP setting
   {
@@ -519,6 +654,7 @@ return {
         jsonc = { 'biome' },
         lua = { 'stylua' },
         markdown = { 'textlint', 'textlint_check' },
+        telekasten = { 'textlint', 'textlint_check' },
         python = { 'ruff' },
         sh = { 'shfmt' },
         text = { 'textlint', 'textlint_check' },
@@ -536,10 +672,10 @@ return {
           prepend_args = { '-i', '2' },
         },
         -- if add following settings, will occur error
-        -- textlint = {
-        --   command = { 'textlint' },
-        --   args = { '--fix', '$FILENAME' },
-        -- },
+        textlint = {
+          command = { 'textlint' },
+          args = { '--fix', '$FILENAME' },
+        },
         -- textlint_check = {
         --   command = { 'textlint' },
         --   args = { '-f', 'json', '--stdin', '--stdin-filename', '$FILENAME' },

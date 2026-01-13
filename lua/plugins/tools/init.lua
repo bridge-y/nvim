@@ -374,8 +374,10 @@ return {
       opt.behaviour = {
         auto_apply_diff_after_generation = true,
       }
-      opt.providers.gemini = {
-        model = 'gemini-2.0-flash',
+      opt.providers = {
+        gemini = {
+          model = 'gemini-2.5-flash',
+        },
       }
 
       -- keymap for avante
