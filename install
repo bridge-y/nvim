@@ -16,69 +16,28 @@ fi
 
 ln -vfsn "${CURRENT_DIR}" "${HOME}"/.config/nvim
 
-# install dependencies if in container
-if [ -f /.dockerenv ]; then
-  sudo apt-get update
-  export DEBIAN_FRONTEND=noninteractive
+# mise install
+if command -v mise >/dev/null 2>&1; then
+  echo "mise is installed."
+else
+  echo "mise is not installed.\nstart installing..."
 
-  sudo apt-get -y install curl
+  curl https://mise.run | sh
+  ln -vfsn $HOME/.local/bin/mise /usr/local/bin/mise
 
-  # nodejs
-  mkdir -p /tmp/nodejs
-  cd /tmp/nodejs
-  sudo apt autoremove -y nodejs
-  curl -SLO https://deb.nodesource.com/nsolid_setup_deb.sh
-  chmod 500 nsolid_setup_deb.sh
-  sudo ./nsolid_setup_deb.sh $NODE_VERSION
-  sudo apt-get install nodejs -y
-
-  # mason.nvim may require
-  sudo apt-get -y install --no-install-recommends \
-    python3 \
-    python3-pip
-
-  # utility
-  sudo apt-get -y install --no-install-recommends \
-    ripgrep \
-    fish
-  mkdir -p "$HOME"/.config/fish
-
-  # http.nvim requires rust
-  type -p rustup >/dev/null || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable)
-  echo 'set -x PATH $HOME/.cargo/bin $PATH' >>"$HOME"/.config/fish/config.fish
-
-  # gh
-  type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y --no-install-recommends)
-  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&
-    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
-    sudo apt update &&
-    sudo apt install -y --no-install-recommends gh
-
-  # Lazygit
-  mkdir -p /tmp/lazygit
-  cd /tmp/lazygit
-  curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz | tar xz
-  sudo install lazygit /usr/local/bin
-
-  # Commitizen
-  sudo npm install -g commitizen
-  sudo npm install -g cz-conventional-changelog
-  echo '{ "path": "cz-conventional-changelog" }' >~/.czrc
-
-  # Neovim
-  sudo apt install -y software-properties-common
-  sudo add-apt-repository -y ppa:neovim-ppa/unstable
-  sudo apt update
-  sudo apt install -y neovim
-
-  # delta
-  mkdir -p /tmp/delta
-  cd /tmp/delta
-  curl -fsSL https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components 1
-  sudo mv /tmp/delta/delta /usr/local/bin/
-
-  # cleanup
-  sudo rm -rf /var/lib/apt/lists/*
-  sudo rm -rf /tmp/*
+  echo 'eval "$(~/.local/bin/mise activate bash)"' >>~/.bashrc
+  # for fish
+  if command -v fish >/dev/null 2>&1; then
+    mkdir -p "$HOME"/.config/fish
+    echo '~/.local/bin/mise activate fish | source' >>~/.config/fish/config.fish
+  fi
 fi
+
+if [ ! -d "$HOME"/.config/mise/conf.d ]; then
+  mkdir -p $HOME/.config/mise/conf.d
+fi
+
+ln -vfsn ${CURRENT_DIR}/mise.nvim.toml $HOME/.config/mise/conf.d/mise.nvim.toml
+
+# install tools by mise
+mise i
