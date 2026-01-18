@@ -3,18 +3,10 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     -- event = "BufReadPost",
+    branch = 'main',
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufWritePost', 'BufNewFile', 'VeryLazy' },
     lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
-    init = function(plugin)
-      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-      -- Luckily, the only things that those plugins need are the custom queries, which we make available
-      -- during startup.
-      require('lazy.core.loader').add_to_rtp(plugin)
-      require('nvim-treesitter.query_predicates')
-    end,
     cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
     keys = {
       { '<c-space>', desc = 'Increment Selection' },
@@ -22,52 +14,131 @@ return {
     },
     opts_extend = { 'ensure_installed' },
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
+      indent = { enable = true }, ---@type lazyvim.TSFeat
+      highlight = { enable = true }, ---@type lazyvim.TSFeat
+      folds = { enable = true }, ---@type lazyvim.TSFeat
       ensure_installed = 'all',
-      ignore_install = { 'phpdoc' },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = '<C-space>',
-          node_incremental = '<C-space>',
-          scope_incremental = false,
-          node_decremental = '<bs>',
-        },
-      },
-      textobjects = {
-        move = {
-          enable = true,
-          goto_next_start = { [']f'] = '@function.outer', [']c'] = '@class.outer', [']a'] = '@parameter.inner' },
-          goto_next_end = { [']F'] = '@function.outer', [']C'] = '@class.outer', [']A'] = '@parameter.inner' },
-          goto_previous_start = { ['[f'] = '@function.outer', ['[c'] = '@class.outer', ['[a'] = '@parameter.inner' },
-          goto_previous_end = { ['[F'] = '@function.outer', ['[C'] = '@class.outer', ['[A'] = '@parameter.inner' },
-        },
-        select = {
-          enable = true,
-          keymaps = {
-            ['af'] = '@function.outer',
-            ['if'] = '@function.inner',
-            ['ac'] = '@class.outer',
-            ['ic'] = '@class.inner',
-          },
-        },
-      },
-      -- vim-matchup
-      matchup = {
-        enable = true,
-      },
+      ignore_install = 'phpdoc',
     },
-    config = function(_, opts)
-      if type(opts.ensure_installed) == 'table' then
-        opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
-      end
-      require('nvim-treesitter.configs').setup(opts)
+    config = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('vim-treesitter-start', {}),
+        callback = function(ctx)
+          -- 必要に応じて`ctx.match`に入っているファイルタイプの値に応じて挙動を制御
+          -- `pcall`でエラーを無視することでパーサーやクエリがあるか気にしなくてすむ
+          pcall(vim.treesitter.start)
+          -- start vim-matchup
+          pcall(require, 'match-up')
+          -- start textobjects
+          pcall(require, 'nvim-treesitter-textobjects')
+          -- start treesitter-context
+          pcall(require, 'treesitter-context')
+        end,
+      })
     end,
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects', lazy = true },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    lazy = true,
+    branch = 'main',
+    init = function()
+      -- Disable entire built-in ftplugin mappings to avoid conflicts.
+      -- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
+      vim.g.no_plugin_maps = true
+
+      -- Or, disable per filetype (add as you like)
+      -- vim.g.no_python_maps = true
+      -- vim.g.no_ruby_maps = true
+      -- vim.g.no_rust_maps = true
+      -- vim.g.no_go_maps = true
+    end,
+    opts = {
+      select = {
+        -- Automatically jump forward to textobj, similar to targets.vim
+        lookahead = true,
+        -- You can choose the select mode (default is charwise 'v')
+        --
+        -- Can also be a function which gets passed a table with the keys
+        -- * query_string: eg '@function.inner'
+        -- * method: eg 'v' or 'o'
+        -- and should return the mode ('v', 'V', or '<c-v>') or a table
+        -- mapping query_strings to modes.
+        selection_modes = {
+          ['@parameter.outer'] = 'v', -- charwise
+          ['@function.outer'] = 'V', -- linewise
+          -- ['@class.outer'] = '<c-v>', -- blockwise
+        },
+        -- If you set this to `true` (default is `false`) then any textobject is
+        -- extended to include preceding or succeeding whitespace. Succeeding
+        -- whitespace has priority in order to act similarly to eg the built-in
+        -- `ap`.
+        --
+        -- Can also be a function which gets passed a table with the keys
+        -- * query_string: eg '@function.inner'
+        -- * selection_mode: eg 'v'
+        -- and should return true of false
+        include_surrounding_whitespace = false,
+      },
+    },
+    config = function()
+      -- move
+      vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
+        require('nvim-treesitter-textobjects.move').goto_next_start('@function.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, ']F', function()
+        require('nvim-treesitter-textobjects.move').goto_next_end('@function.outer', 'textobjects')
+      end)
+
+      vim.keymap.set({ 'n', 'x', 'o' }, ']c', function()
+        require('nvim-treesitter-textobjects.move').goto_next_start('@class.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, ']C', function()
+        require('nvim-treesitter-textobjects.move').goto_next_end('@class.outer', 'textobjects')
+      end)
+
+      vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
+        require('nvim-treesitter-textobjects.move').goto_previous_start('@function.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, '[F', function()
+        require('nvim-treesitter-textobjects.move').goto_previous_end('@function.outer', 'textobjects')
+      end)
+
+      vim.keymap.set({ 'n', 'x', 'o' }, '[c', function()
+        require('nvim-treesitter-textobjects.move').goto_previous_start('@class.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, '[C', function()
+        require('nvim-treesitter-textobjects.move').goto_previous_end('@class.outer', 'textobjects')
+      end)
+
+      -- select
+      vim.keymap.set({ 'x', 'o' }, 'af', function()
+        require('nvim-treesitter-textobjects.select').select_textobject('@function.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'x', 'o' }, 'if', function()
+        require('nvim-treesitter-textobjects.select').select_textobject('@function.inner', 'textobjects')
+      end)
+      vim.keymap.set({ 'x', 'o' }, 'ac', function()
+        require('nvim-treesitter-textobjects.select').select_textobject('@class.outer', 'textobjects')
+      end)
+      vim.keymap.set({ 'x', 'o' }, 'ic', function()
+        require('nvim-treesitter-textobjects.select').select_textobject('@class.inner', 'textobjects')
+      end)
+      -- You can also use captures from other query groups like `locals.scm`
+      vim.keymap.set({ 'x', 'o' }, 'as', function()
+        require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
+      end)
+    end,
+  },
   { 'nvim-treesitter/nvim-treesitter-context', lazy = true },
-  { 'andymass/vim-matchup', lazy = true },
+  {
+    'andymass/vim-matchup',
+    lazy = true,
+    opts = {
+      treesitter = {
+        stopline = 500,
+      },
+    },
+  },
 
   -- 'numToStr/Comment.nvim',
   {
