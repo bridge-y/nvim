@@ -71,12 +71,13 @@ opt.whichwrap = 'h,l,<,>,[,],~'
 opt.breakindentopt = 'shift:2,min:20'
 opt.showbreak = '↳ '
 
-opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+opt.fillchars = { eob = " ", fold = " ", foldopen = "", foldsep = " ", foldclose = "" }
 opt.foldcolumn = '1'
 opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
 opt.foldenable = true
-opt.foldmethod = 'marker'
+-- opt.foldmethod = 'marker' -- for ufo
+opt.foldmethod = 'expr'
 
 opt.number = true
 opt.signcolumn = 'yes'

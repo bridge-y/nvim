@@ -10,7 +10,7 @@ return {
     cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
     keys = {
       { '<c-space>', desc = 'Increment Selection' },
-      { '<bs>', desc = 'Decrement Selection', mode = 'x' },
+      { '<bs>',      desc = 'Decrement Selection', mode = 'x' },
     },
     opts_extend = { 'ensure_installed' },
     opts = {
@@ -25,14 +25,29 @@ return {
         group = vim.api.nvim_create_augroup('vim-treesitter-start', {}),
         callback = function(ctx)
           -- 必要に応じて`ctx.match`に入っているファイルタイプの値に応じて挙動を制御
-          -- `pcall`でエラーを無視することでパーサーやクエリがあるか気にしなくてすむ
-          pcall(vim.treesitter.start)
-          -- start vim-matchup
-          pcall(require, 'match-up')
-          -- start textobjects
-          pcall(require, 'nvim-treesitter-textobjects')
-          -- start treesitter-context
-          pcall(require, 'treesitter-context')
+          local ts = require("nvim-treesitter")
+          local ok_available, available_langs = pcall(ts.get_available)
+
+          local treesitter = vim.treesitter
+          local ok_lang, lang = pcall(treesitter.language.get_lang, ctx.match)
+
+          local tbl_contains = vim.tbl_contains
+          if ok_available and ok_lang and tbl_contains(available_langs, lang) then
+            local ok_installed, installed_langs = pcall(ts.get_installed)
+            if ok_installed and not tbl_contains(installed_langs, lang) then
+              pcall(ts.install, lang)
+            end
+            -- `pcall`でエラーを無視することでパーサーやクエリがあるか気にしなくてすむ
+            pcall(vim.treesitter.start)
+            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+            -- start vim-matchup
+            pcall(require, 'match-up')
+            -- start textobjects
+            pcall(require, 'nvim-treesitter-textobjects')
+            -- start treesitter-context
+            pcall(require, 'treesitter-context')
+          end
         end,
       })
     end,
@@ -65,7 +80,7 @@ return {
         -- mapping query_strings to modes.
         selection_modes = {
           ['@parameter.outer'] = 'v', -- charwise
-          ['@function.outer'] = 'V', -- linewise
+          ['@function.outer'] = 'V',  -- linewise
           -- ['@class.outer'] = '<c-v>', -- blockwise
         },
         -- If you set this to `true` (default is `false`) then any textobject is
@@ -191,8 +206,8 @@ return {
   {
     'monaqa/dial.nvim',
     keys = {
-      { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: increment' },
-      { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: decrement' },
+      { '<C-a>',  '<Plug>(dial-increment)',  noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: increment' },
+      { '<C-x>',  '<Plug>(dial-decrement)',  noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: decrement' },
       { 'g<C-a>', 'g<Plug>(dial-increment)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: increment' },
       { 'g<C-x>', 'g<Plug>(dial-decrement)', noremap = true, mode = { 'n', 'v' }, desc = 'dial.nvim: decrement' },
     },
@@ -223,7 +238,7 @@ return {
           augend.constant.alias.bool, -- true, false
           augend.constant.new({
             elements = { 'and', 'or' },
-            word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+            word = true,   -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
             cyclic = true, -- "or" is incremented into "and".
           }),
           augend.constant.new({
@@ -233,9 +248,9 @@ return {
           }),
           augend.constant.new({
             elements = { 'True', 'False' },
-            word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+            word = true,   -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
             cyclic = true, -- "or" is incremented into "and".
-          }), -- Python's bool
+          }),              -- Python's bool
           augend.hexcolor.new({
             case = 'lower',
           }),
@@ -272,13 +287,13 @@ return {
       hide_numbers = true, -- hide the number column in toggleterm buffers
       shade_filetypes = {},
       shade_terminals = false,
-      shading_factor = '1', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+      shading_factor = '1',   -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
       start_in_insert = true,
       insert_mappings = true, -- whether or not the open mapping applies in insert mode
       persist_size = true,
       direction = 'horizontal',
       close_on_exit = true, -- close the terminal window when the process exits
-      shell = vim.o.shell, -- change the default shell
+      shell = vim.o.shell,  -- change the default shell
       winbar = {
         enabled = true,
         name_formatter = function(term) --  term: Terminal
@@ -349,6 +364,7 @@ return {
   -- 'kevinhwang91/nvim-ufo',
   {
     'kevinhwang91/nvim-ufo',
+    cond = false,
     event = 'BufRead',
     keys = {
       {
@@ -438,23 +454,23 @@ return {
       -- require('ufo').setFoldVirtTextHandler(bufnr, handler)
     end,
   },
-  { 'kevinhwang91/promise-async', lazy = true },
+  { 'kevinhwang91/promise-async',              lazy = true },
   -- if not use herline.nvim, enable statuscol.nvim
   {
     'luukvbaal/statuscol.nvim',
-    lazy = true,
+    event = 'BufRead',
     config = function()
       local builtin = require('statuscol.builtin')
       require('statuscol').setup({
         relculright = true,
         segments = {
-          { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+          { text = { builtin.foldfunc },      click = 'v:lua.ScFa' },
           {
             sign = { name = { 'Diagnostic' }, maxwidth = 2, auto = true },
             click = 'v:lua.ScSa',
           },
           { text = { builtin.lnumfunc, ' ' }, click = 'v:lua.ScLa' },
-          { text = { '%s' }, click = 'v:lua.ScSa' },
+          { text = { '%s' },                  click = 'v:lua.ScSa' },
         },
       })
     end,
