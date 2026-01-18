@@ -58,8 +58,8 @@ return {
       require('telescope').load_extension('egrepify')
     end,
   },
-  { 'nvim-lua/plenary.nvim', lazy = true },
-  { 'nvim-telescope/telescope-fzy-native.nvim', lazy = true },
+  { 'nvim-lua/plenary.nvim',                      lazy = true },
+  { 'nvim-telescope/telescope-fzy-native.nvim',   lazy = true },
   { 'nvim-telescope/telescope-file-browser.nvim', lazy = true },
   {
     'ahmedkhalf/project.nvim',
@@ -78,9 +78,9 @@ return {
       })
     end,
   },
-  { 'debugloop/telescope-undo.nvim', lazy = true },
+  { 'debugloop/telescope-undo.nvim',             lazy = true },
   { 'nvim-telescope/telescope-media-files.nvim', lazy = true },
-  { 'fdschmidt93/telescope-egrepify.nvim', lazy = true },
+  { 'fdschmidt93/telescope-egrepify.nvim',       lazy = true },
 
   -- 'glepnir/hlsearch.nvim',
   {

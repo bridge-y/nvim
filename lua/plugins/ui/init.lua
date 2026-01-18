@@ -283,8 +283,8 @@ return {
       },
     },
   },
-  { 'nvim-lua/plenary.nvim', lazy = true },
-  { 'MunifTanjim/nui.nvim', lazy = true },
+  { 'nvim-lua/plenary.nvim',       lazy = true },
+  { 'MunifTanjim/nui.nvim',        lazy = true },
   {
     's1n7ax/nvim-window-picker',
     lazy = true,
@@ -337,7 +337,7 @@ return {
           enabled = false,
           view = nil, -- when nil, use defaults from documentation
           -- ---@type NoiceViewOptions
-          opts = {}, -- merged with defaults from documentation
+          opts = {},  -- merged with defaults from documentation
         },
         signature = {
           -- to use lspsaga
@@ -346,17 +346,17 @@ return {
             enabled = true,
             trigger = true, -- Automatically show signature help when typing a trigger character from the LSP
             luasnip = true, -- Will open signature help when jumping to Luasnip insert nodes
-            throttle = 50, -- Debounce lsp signature help request by 50ms
+            throttle = 50,  -- Debounce lsp signature help request by 50ms
           },
         },
       },
       -- you can enable a preset for easier configuration
       presets = {
-        bottom_search = true, -- use a classic bottom cmdline for search
-        command_palette = true, -- position the cmdline and popupmenu together
+        bottom_search = true,         -- use a classic bottom cmdline for search
+        command_palette = true,       -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = true, -- enables an input dialog for inc-rename.nvim
-        lsp_doc_border = false, -- add a border to hover docs and signature help
+        inc_rename = true,            -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = false,       -- add a border to hover docs and signature help
       },
       routes = {
         {
@@ -896,9 +896,9 @@ return {
           },
           { '<leader>hs', cmd('Gitsigns stage_hunk'), { buffer = bufnr, desc = 'git: Stage hunk' } },
           { '<leader>hr', cmd('Gitsigns reset_hunk'), { buffer = bufnr, desc = 'git: Reset hunk' } },
-          { '<leader>hu', ga.undo_stage_hunk, { buffer = bufnr, desc = 'git: Undo stage hunk' } },
-          { '<leader>hR', ga.reset_buffer, { buffer = bufnr, desc = 'git: Reset buffer' } },
-          { '<leader>hp', ga.preview_hunk, { buffer = bufnr, desc = 'git: Preview hunk' } },
+          { '<leader>hu', ga.undo_stage_hunk,         { buffer = bufnr, desc = 'git: Undo stage hunk' } },
+          { '<leader>hR', ga.reset_buffer,            { buffer = bufnr, desc = 'git: Reset buffer' } },
+          { '<leader>hp', ga.preview_hunk,            { buffer = bufnr, desc = 'git: Preview hunk' } },
           {
             '<leader>hb',
             function()

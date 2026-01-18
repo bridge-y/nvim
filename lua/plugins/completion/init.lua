@@ -78,8 +78,8 @@ return {
         formatting = {
           fields = { 'menu', 'abbr', 'kind' },
           format = lspkind.cmp_format({
-            mode = 'symbol', -- show only symbol annotations
-            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            mode = 'symbol',       -- show only symbol annotations
+            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
             ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
             -- The function below will be called before any actual modifications from lspkind
             -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
@@ -90,7 +90,7 @@ return {
     end,
   },
   { 'hrsh7th/cmp-buffer', lazy = true }, -- Optional
-  { 'hrsh7th/cmp-path', lazy = true }, -- Optional
+  { 'hrsh7th/cmp-path',   lazy = true }, -- Optional
   {
     'saadparwaiz1/cmp_luasnip',
     lazy = true,
@@ -113,14 +113,14 @@ return {
       require('luasnip.loaders.from_vscode').lazy_load()
       require('luasnip.loaders.from_vscode').lazy_load({ paths = { './snippets/' } })
     end,
-  }, -- Optional
-  { 'hrsh7th/cmp-nvim-lua', lazy = true }, -- Optional
-  { 'petertriho/cmp-git', lazy = true }, -- Optional
-  { 'onsails/lspkind.nvim', lazy = true },
-  { 'ray-x/lsp_signature.nvim', lazy = true },
-  { 'ray-x/cmp-treesitter', lazy = true },
+  },                                               -- Optional
+  { 'hrsh7th/cmp-nvim-lua',         lazy = true }, -- Optional
+  { 'petertriho/cmp-git',           lazy = true }, -- Optional
+  { 'onsails/lspkind.nvim',         lazy = true },
+  { 'ray-x/lsp_signature.nvim',     lazy = true },
+  { 'ray-x/cmp-treesitter',         lazy = true },
   -- Snippets
-  { 'L3MON4D3/LuaSnip', lazy = true }, -- Required
+  { 'L3MON4D3/LuaSnip',             lazy = true }, -- Required
   { 'rafamadriz/friendly-snippets', lazy = true }, -- Optional
   {
     'hrsh7th/cmp-cmdline',
@@ -146,7 +146,7 @@ return {
     end,
   },
   { 'hrsh7th/cmp-nvim-lsp-document-symbol', lazy = true },
-  { 'lukas-reineke/cmp-under-comparator', lazy = true },
+  { 'lukas-reineke/cmp-under-comparator',   lazy = true },
 
   -- 'neovim/nvim-lspconfig',
   {
@@ -160,9 +160,9 @@ return {
       -- lsp_signature
       -- https://github.com/VonHeikemen/lsp-zero.nvim/issues/69
       local lsp_signature_config = {
-        bind = true, -- This is mandatory, otherwise border config won't get registered.
+        bind = true,    -- This is mandatory, otherwise border config won't get registered.
         fix_pos = true, -- set to true, the floating window will not auto-close until finish all parameters
-        noice = true, -- set to true if you using noice to render markdown
+        noice = true,   -- set to true if you using noice to render markdown
         handler_opts = {
           border = 'rounded',
         },
@@ -171,7 +171,7 @@ return {
       -- Add cmp_nvim_lsp capabilities settings to lspconfig
       -- This should be executed before you configure any language server
       lsp_defaults.capabilities =
-        vim.tbl_deep_extend('force', lsp_defaults.capabilities, require('cmp_nvim_lsp').default_capabilities())
+          vim.tbl_deep_extend('force', lsp_defaults.capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       -- LspAttach is where you enable features that only work
       -- if there is a language server active in the file
@@ -438,7 +438,7 @@ return {
     --   })
     -- end,
   },
-  { 'hrsh7th/cmp-nvim-lsp', lazy = true },
+  { 'hrsh7th/cmp-nvim-lsp',           lazy = true },
   { 'mason-org/mason-lspconfig.nvim', lazy = true },
 
   -- LSP setting
@@ -467,7 +467,7 @@ return {
     end,
   },
 
-  { 'folke/neodev.nvim', lazy = true, opts = {} },
+  { 'folke/neodev.nvim',           lazy = true, opts = {} },
 
   -- 'nvimdev/lspsaga.nvim',
   {

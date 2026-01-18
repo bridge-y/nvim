@@ -46,8 +46,8 @@ return {
       local opts = keymap.new_opts
 
       nmap({
-        { '<leader>Ct', crates.toggle, opts(silent, 'Crates: Enable or disable UI elements') },
-        { '<leader>Cr', crates.reload, opts(silent, 'Crates: Reload data') },
+        { '<leader>Ct', crates.toggle,      opts(silent, 'Crates: Enable or disable UI elements') },
+        { '<leader>Cr', crates.reload,      opts(silent, 'Crates: Reload data') },
         { '<leader>CK', show_documentation, opts(silent, 'Crates: Show/hide popup with crate details') },
         {
           '<leader>Cv',
@@ -65,9 +65,9 @@ return {
           opts(silent, 'Crates: Show/hide popup with crate details (always show dependencies)'),
         },
 
-        { '<leader>Cu', crates.update_crate, opts(silent, 'Crates: Update crate') },
-        { '<leader>Ca', crates.update_all_crates, opts(silent, 'Crates: Update all crates') },
-        { '<leader>CU', crates.upgrade_crate, opts(silent, 'Crates: Upgrade crate') },
+        { '<leader>Cu', crates.update_crate,       opts(silent, 'Crates: Update crate') },
+        { '<leader>Ca', crates.update_all_crates,  opts(silent, 'Crates: Update all crates') },
+        { '<leader>CU', crates.upgrade_crate,      opts(silent, 'Crates: Upgrade crate') },
         { '<leader>CA', crates.upgrade_all_crates, opts(silent, 'Crates: Upgrade all crates') },
 
         {
@@ -81,14 +81,14 @@ return {
           opts(silent, 'Crates: Extract an crate declaration from a dependency section into a table'),
         },
 
-        { '<leader>CH', crates.open_homepage, opts(silent, 'Crates: Open the homepage of the crate') },
-        { '<leader>CR', crates.open_repository, opts(silent, 'Crates: Open the repository page of the crate') },
+        { '<leader>CH', crates.open_homepage,      opts(silent, 'Crates: Open the homepage of the crate') },
+        { '<leader>CR', crates.open_repository,    opts(silent, 'Crates: Open the repository page of the crate') },
         { '<leader>CD', crates.open_documentation, opts(silent, 'Crates: Open the documentation page of the crate') },
         { '<leader>Cc', crates.open_documentation, opts(silent, 'Crates: Open the `crate.io` page of the crate') },
       })
 
       vmap({
-        { '<leader>Cu', crates.update_crates, opts(silent, 'Crates: Update crate') },
+        { '<leader>Cu', crates.update_crates,  opts(silent, 'Crates: Update crate') },
         { '<leader>CU', crates.upgrade_crates, opts(silent, 'Crates: Upgrade crate') },
       })
     end,
