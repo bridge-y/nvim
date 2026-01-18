@@ -2,6 +2,7 @@
 delta = "latest"
 gh = "latest"
 "github:kovidgoyal/kitty" = "0.45.0"
+imagemagick = "latest"
 lazygit = "latest"
 lua-language-server = "latest"
 neovim = "latest"

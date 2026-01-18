@@ -358,7 +358,10 @@ return {
   -- '3rd/image.nvim',
   {
     '3rd/image.nvim',
-    opts = {},
+    build = false,
+    opts = {
+      processor = 'magick_cli',
+    },
   },
 
   -- 'yetone/avante.nvim',
